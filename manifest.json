@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "ETF定投决策工具",
+    "version": "1.2",
+    "description": "一个简单的ETF定投决策工具，支持纳斯达克和标普500ETF。",
+    "permissions": [
+        "storage",
+        "activeTab",
+        "scripting"
+    ],
+    "host_permissions": [
+        "https://www.alphavantage.co/*"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    }
+}

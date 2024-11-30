@@ -1,0 +1,73 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    width: 300px;
+    padding: 10px;
+}
+
+.container {
+    text-align: center;
+}
+
+.info {
+    margin-bottom: 15px;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#statusMessage {
+    margin-top: 10px;
+    color: green;
+}
+
+.trends {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.trend {
+    margin-bottom: 10px;
+}
+
+.trend p {
+    margin: 5px 0;
+}
+
+.trend #nasdaqTrends,
+.trend #sp500Trends {
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    gap: 5px;
+}
+
+.trend .trend-item {
+    display: flex;
+    align-items: center;
+}
+
+.trend .trend-item .arrow {
+    font-size: 16px;
+    margin-right: 3px;
+}
+
+.trend .trend-item.up .arrow {
+    color: green;
+}
+
+.trend .trend-item.down .arrow {
+    color: red;
+}
+
+.trend .trend-item.stable .arrow {
+    color: gray;
+}
