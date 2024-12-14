@@ -2,15 +2,36 @@ document.addEventListener("DOMContentLoaded", initialize);
 
 function initialize() {
   displayInvestmentInfo();
-  displayETFTrends(); // 显示ETF行情趋势
+  displayETFTrends();
   document
     .getElementById("executeInvestment")
     .addEventListener("click", executeInvestment);
 }
 
-// 获取当前日期并根据时区转换为目标日期
+function logStatus(message, type = "info") {
+  const statusBox = document.getElementById("statusBox");
+
+  let logMessage;
+  switch (type) {
+    case "error":
+      logMessage = `[错误]: ${message}`;
+      break;
+    case "warning":
+      logMessage = `[警告]: ${message}`;
+      break;
+    case "success":
+      logMessage = `[成功]: ${message}`;
+      break;
+    default:
+      logMessage = `[信息]: ${message}`;
+  }
+
+  statusBox.value += logMessage + "\n";
+  statusBox.scrollTop = statusBox.scrollHeight;
+}
+
 function getLocalDate() {
-  const userTimeZone = "Asia/Shanghai"; // 用户的时区（可以通过获取用户时区自动化）
+  const userTimeZone = "Asia/Shanghai";
   const date = new Date();
   const options = {
     timeZone: userTimeZone,
@@ -18,42 +39,30 @@ function getLocalDate() {
     month: "2-digit",
     day: "2-digit",
   };
-  const localDate = new Date(date.toLocaleString("en-US", options));
-  return localDate;
+  return new Date(date.toLocaleString("en-US", options));
 }
 
-// 从本地存储获取ETF数据（如果过期则重新拉取）
-function getETFData() {
-  const lastFetchedDate = localStorage.getItem("lastFetchedDate");
-  const today = getLocalDate();
-
-  // 检查数据是否已经过期，假设缓存过期时间为1周
-  if (
-    lastFetchedDate &&
-    new Date(lastFetchedDate).getDate() === today.getDate()
-  ) {
-    // 数据不需要更新
-    return JSON.parse(localStorage.getItem("etfPrices"));
+function validateAPIResponse(response) {
+  if (response["Error Message"]) {
+    logStatus("API密钥错误，请检查密钥。", "error");
+    return false;
   }
-
-  // 否则需要重新拉取
-  return fetchETFPrices();
+  if (response["Note"]) {
+    logStatus("API请求频率过高，请稍后重试。", "warning");
+    return false;
+  }
+  if (!response["Global Quote"] || !response["Global Quote"]["05. price"]) {
+    logStatus("API返回数据无效。", "error");
+    return false;
+  }
+  return true;
 }
 
-// 保存ETF数据到本地
-function saveETFData(prices) {
-  const today = getLocalDate();
-  localStorage.setItem("etfPrices", JSON.stringify(prices));
-  localStorage.setItem("lastFetchedDate", today.toISOString());
-}
-
-// 获取ETF数据的函数
 function fetchETFPrices() {
-  const nasdaqSymbol = "QQQ"; // 纳斯达克ETF
-  const sp500Symbol = "SPY"; // 标普500ETF
-  const apiKey = "YOUR_ALPHA_VANTAGE_API_KEY"; // API密钥
+  const nasdaqSymbol = "QQQ";
+  const sp500Symbol = "SPY";
+  const apiKey = "YOUR_ALPHA_VANTAGE_API_KEY";
 
-  // 调用Alpha Vantage API获取ETF价格
   const nasdaqURL = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${nasdaqSymbol}&apikey=${apiKey}`;
   const sp500URL = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sp500Symbol}&apikey=${apiKey}`;
 
@@ -62,49 +71,28 @@ function fetchETFPrices() {
     fetch(sp500URL).then((response) => response.json()),
   ])
     .then((data) => {
-      const nasdaqPrice = data[0]["Global Quote"]["05. price"];
-      const sp500Price = data[1]["Global Quote"]["05. price"];
-      const prices = {
-        nasdaq: parseFloat(nasdaqPrice),
-        sp500: parseFloat(sp500Price),
-      };
+      if (!validateAPIResponse(data[0]) || !validateAPIResponse(data[1])) {
+        throw new Error("API返回无效数据");
+      }
 
-      // 保存数据到本地
-      saveETFData(prices);
+      const nasdaqPrice = parseFloat(data[0]["Global Quote"]["05. price"]);
+      const sp500Price = parseFloat(data[1]["Global Quote"]["05. price"]);
+      const prices = { nasdaq: nasdaqPrice, sp500: sp500Price };
 
+      logStatus("成功获取ETF数据。", "success");
       return prices;
     })
     .catch((error) => {
-      console.error("获取ETF价格失败：", error);
-      throw new Error("获取ETF价格失败");
+      logStatus(`获取ETF价格失败: ${error.message}`, "error");
+      throw error;
     });
 }
 
-// 将时间转换为美国东部时间
-function convertToEST(date) {
-  const estTimeZone = "America/New_York";
-  return new Date(date.toLocaleString("en-US", { timeZone: estTimeZone }));
-}
-
-// 检查当前时间是否符合交易时间
-function isInMarketHours() {
-  const currentDate = getLocalDate();
-  const estDate = convertToEST(currentDate);
-
-  const marketOpen = new Date(estDate.setHours(9, 30, 0)); // 9:30 AM EST
-  const marketClose = new Date(estDate.setHours(16, 0, 0)); // 4:00 PM EST
-
-  // 检查当前时间是否在交易时段内
-  return currentDate >= marketOpen && currentDate <= marketClose;
-}
-
-// 显示投资信息
 function displayInvestmentInfo() {
   chrome.storage.local.get(["investments"], function (result) {
     const investments = result.investments || [];
     const lastInvestment = investments[investments.length - 1];
 
-    // 显示上次定投信息
     if (lastInvestment) {
       document.getElementById("lastInvestmentDate").innerText =
         lastInvestment.date;
@@ -112,63 +100,42 @@ function displayInvestmentInfo() {
       document.getElementById("lastInvestmentDate").innerText = "暂无记录";
     }
 
-    // 计算并显示下个定投日
     const nextDate = calculateNextInvestmentDate(
       lastInvestment ? lastInvestment.date : null
     );
     document.getElementById("nextInvestmentDate").innerText = nextDate;
 
-    // 显示当前定投比例
-    const currentPercentage = calculateCurrentInvestmentPercentage(investments);
-    document.getElementById(
-      "currentInvestmentPercentage"
-    ).innerText = `${currentPercentage}%`;
+    document.getElementById("currentInvestmentPercentage").innerText = "100%";
   });
 }
 
-// 执行定投操作
 function executeInvestment() {
-  const baseInvestmentAmount = 100; // 基础定投金额
-  const currentPercentage = getCurrentInvestmentPercentage(); // 获取当前定投比例
-  const investmentAmount = (baseInvestmentAmount * currentPercentage) / 100;
+  const baseInvestmentAmount = 100;
+  const investmentAmount = baseInvestmentAmount;
 
-  // 获取当前日期
-  const today = new Date();
-  const formattedDate = formatDate(today);
-
-  // 获取ETF价格数据
-  getETFData()
+  getETFPrices()
     .then((prices) => {
-      // 检查是否在市场交易时间内
-      if (!isInMarketHours()) {
-        console.log("当前不在交易时间内，定投操作被跳过");
-        return;
-      }
-
-      // 记录定投操作
       chrome.storage.local.get(["investments"], function (result) {
         const investments = result.investments || [];
         investments.push({
-          date: formattedDate,
+          date: new Date().toISOString().split("T")[0],
           amount: investmentAmount,
-          prices: prices, // 可选，记录当日价格
+          prices,
         });
-        chrome.storage.local.set({ investments: investments }, function () {
-          document.getElementById("statusMessage").innerText = "定投成功！";
+
+        chrome.storage.local.set({ investments }, function () {
+          logStatus("定投成功完成。", "success");
           displayInvestmentInfo();
         });
       });
     })
     .catch((error) => {
-      document.getElementById("statusMessage").innerText =
-        "定投失败，请稍后重试。";
-      console.error("获取ETF价格失败：", error);
+      logStatus(`定投操作失败: ${error.message}`, "error");
     });
 }
 
-// 计算下个定投日
 function calculateNextInvestmentDate(lastDateStr) {
-  const investmentDay = 2; // 周二 (0=周日, 1=周一, ..., 6=周六)
+  const investmentDay = 2;
   let nextDate = new Date();
 
   if (lastDateStr) {
@@ -176,97 +143,30 @@ function calculateNextInvestmentDate(lastDateStr) {
     nextDate.setDate(nextDate.getDate() + 7);
   }
 
-  // 确保下个定投日为周二
   while (nextDate.getDay() !== investmentDay) {
     nextDate.setDate(nextDate.getDate() + 1);
   }
 
-  return formatDate(nextDate);
+  return `${nextDate.getFullYear()}-${(nextDate.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${nextDate.getDate().toString().padStart(2, "0")}`;
 }
 
-// 格式化日期为 yyyy-mm-dd 格式
-function formatDate(date) {
-  const year = date.getFullYear();
-  const month = `0${date.getMonth() + 1}`.slice(-2);
-  const day = `0${date.getDate()}`.slice(-2);
-  return `${year}-${month}-${day}`;
-}
-
-// 计算当前定投比例
-function calculateCurrentInvestmentPercentage(investments) {
-  // 第一阶段：固定100%
-  // 后续阶段可根据趋势分析动态调整比例
-  return 100;
-}
-
-function getCurrentInvestmentPercentage() {
-  // 获取当前定投比例，默认100%
-  return 100;
-}
-
-// 显示ETF行情趋势
 function displayETFTrends() {
-  const nasdaqSymbol = "QQQ"; // 纳斯达克ETF示例
-  const sp500Symbol = "SPY"; // 标普500ETF示例
-  const apiKey = "UVBRSRYRE9MIZ5JK"; // 请替换为您的API密钥
-
-  // 获取纳斯达克和标普500的历史数据
-  Promise.all([
-    fetchETFFromWeekly(nasdaqSymbol, apiKey),
-    fetchETFFromWeekly(sp500Symbol, apiKey),
-  ])
-    .then(([nasdaqData, sp500Data]) => {
-      const nasdaqTrends = calculateTrends(nasdaqData);
-      const sp500Trends = calculateTrends(sp500Data);
-
-      // 更新纳斯达克趋势
-      const nasdaqTrendsElement = document.getElementById("nasdaqTrends");
-      nasdaqTrendsElement.innerHTML = nasdaqTrends.map(formatTrend).join(" | ");
-
-      // 更新标普500趋势
-      const sp500TrendsElement = document.getElementById("sp500Trends");
-      sp500TrendsElement.innerHTML = sp500Trends.map(formatTrend).join(" | ");
+  logStatus("正在加载ETF趋势数据...", "info");
+  fetchETFPrices()
+    .then((prices) => {
+      document.getElementById(
+        "nasdaqTrends"
+      ).innerText = `当前价格: $${prices.nasdaq}`;
+      document.getElementById(
+        "sp500Trends"
+      ).innerText = `当前价格: $${prices.sp500}`;
+      logStatus("成功加载ETF趋势数据。", "success");
     })
     .catch((error) => {
-      document.getElementById("nasdaqTrends").innerText = "获取失败";
-      document.getElementById("sp500Trends").innerText = "获取失败";
-      console.error("获取ETF历史数据失败：", error);
+      document.getElementById("nasdaqTrends").innerText = "加载失败";
+      document.getElementById("sp500Trends").innerText = "加载失败";
+      logStatus(`加载ETF趋势数据失败: ${error.message}`, "error");
     });
-}
-
-function fetchETFFromWeekly(symbol, apiKey) {
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=${symbol}&apikey=${apiKey}`;
-
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      return data["Weekly Time Series"];
-    })
-    .catch((error) => {
-      console.error(`获取${symbol}历史数据失败：`, error);
-      throw new Error(`获取${symbol}历史数据失败`);
-    });
-}
-
-function calculateTrends(data) {
-  const trends = [];
-  for (let date in data) {
-    if (data.hasOwnProperty(date)) {
-      const closePrice = parseFloat(data[date]["4. close"]);
-      trends.push({ date, closePrice });
-    }
-  }
-  return trends.reverse(); // 反转，以便最近的时间在前
-}
-
-function formatTrend({ date, closePrice }, index) {
-  if (index === 0) return `${date}: 最新数据`;
-
-  const previousClosePrice = trends[index - 1].closePrice;
-  const percentageChange =
-    ((closePrice - previousClosePrice) / previousClosePrice) * 100;
-  const trend = percentageChange > 0 ? "涨" : "跌";
-  const trendPercentage = percentageChange.toFixed(2);
-
-  return `${date}: ${trend} ${Math.abs(trendPercentage)}%`;
 }

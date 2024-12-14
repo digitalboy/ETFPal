@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>ETF定投决策工具</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="container">
-        <h2>ETF定投助手</h2>
-        <div class="info">
-            <p><strong>下个定投日：</strong><span id="nextInvestmentDate">加载中...</span></p>
-            <p><strong>上个定投日：</strong><span id="lastInvestmentDate">暂无记录</span></p>
-            <p><strong>假如今天定投：</strong><span id="currentInvestmentPercentage">--</span></p>
-            <p><strong>连续下跌天数：</strong><span id="consecutiveDownDays">0</span></p>
-        </div>
-        <button id="executeInvestment">如果定投完成请点击</button>
-        <div id="statusMessage"></div>
+      <h2>ETF定投助手</h2>
+      <div class="info">
+        <p>
+          <strong>下个定投日：</strong>
+          <span id="nextInvestmentDate">加载中...</span>
+        </p>
+        <p>
+          <strong>上个定投日：</strong>
+          <span id="lastInvestmentDate">暂无记录</span>
+        </p>
+        <p>
+          <strong>假如今天定投：</strong>
+          <span id="currentInvestmentPercentage">--</span>
+        </p>
+        <p>
+          <strong>连续下跌天数：</strong>
+          <span id="consecutiveDownDays">0</span>
+        </p>
+      </div>
+      <button id="executeInvestment">如果定投完成请点击</button>
+      <div id="statusMessage"></div>
 
-        <!-- 行情趋势部分 -->
-        <div class="trends">
-            <h3>行情趋势</h3>
-            <div class="trend">
-                <p><strong>纳斯达克前三周情况：</strong></p>
-                <p id="nasdaqTrends">加载中...</p>
-            </div>
-            <div class="trend">
-                <p><strong>标普500前三周情况：</strong></p>
-                <p id="sp500Trends">加载中...</p>
-            </div>
+      <!-- 行情趋势部分 -->
+      <div class="trends">
+        <h3>行情趋势</h3>
+        <div class="trend">
+          <p><strong>纳斯达克前三周情况：</strong></p>
+          <p id="nasdaqTrends">加载中...</p>
         </div>
+        <div class="trend">
+          <p><strong>标普500前三周情况：</strong></p>
+          <p id="sp500Trends">加载中...</p>
+        </div>
+      </div>
+      <div class="status-container">
+        <textarea id="statusBox" readonly></textarea>
+      </div>
     </div>
     <script src="popup.js"></script>
-</body>
+  </body>
 </html>
