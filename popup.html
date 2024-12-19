@@ -2,76 +2,100 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <title>ETF定投决策工具</title>
+    <title>ETF 定投决策工具</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
     <div class="container">
-      <h2>ETF定投助手</h2>
-      <div class="settings-header">
-        <button id="toggleSettings">设置</button>
-      </div>
+      <header class="header">
+        <h1>ETF 定投助手</h1>
+        <button id="toggleSettings" class="settings-button">
+          <i class="fas fa-cog"></i>
+        </button>
+      </header>
       <div id="settingsContainer" class="settings-container hidden">
-        <label for="increaseRate">周增幅比例 (%):</label>
-        <input type="number" id="increaseRate" value="10" /><br />
-        <label for="monthlyIncreaseRate">月增幅比例 (%):</label>
-        <input type="number" id="monthlyIncreaseRate" value="10" /><br />
+        <div class="setting-item">
+          <label for="increaseRate">周增幅比例 (%):</label>
+          <input type="number" id="increaseRate" value="10" />
+        </div>
+        <div class="setting-item">
+          <label for="monthlyIncreaseRate">月增幅比例 (%):</label>
+          <input type="number" id="monthlyIncreaseRate" value="10" />
+        </div>
+        <div class="setting-item">
           <label for="investmentDay">每周定投日:</label>
           <select id="investmentDay">
-              <option value="1">周一</option>
-              <option value="2">周二</option>
-              <option value="3">周三</option>
-              <option value="4">周四</option>
-              <option value="5">周五</option>
-          </select><br />
-        <button id="saveSettings">保存设置</button>
-          <div id="settingsStatus"></div>
+            <option value="1">周一</option>
+            <option value="2">周二</option>
+            <option value="3">周三</option>
+            <option value="4">周四</option>
+            <option value="5">周五</option>
+          </select>
+        </div>
+        <button id="saveSettings" class="save-button">保存设置</button>
+        <div id="settingsStatus"></div>
       </div>
 
-      <div class="info">
-        <p>
-          <strong>下个定投日：</strong>
+      <div class="info-card">
+        <div class="info-row">
+          <label>下个定投日：</label>
           <span id="nextInvestmentDate">加载中...</span>
-        </p>
-        <p>
-          <strong>上个定投日：</strong>
+        </div>
+        <div class="info-row">
+          <label>上个定投日：</label>
           <span id="lastInvestmentDate">暂无记录</span>
-        </p>
-          <p>
-              <strong>当前周增幅：</strong>
-              <span id="currentWeeklyIncreaseRate">--</span>
-          </p>
-            <p>
-              <strong>当前月增幅：</strong>
-              <span id="currentMonthlyIncreaseRate">--</span>
-          </p>
-        <p>
-          <strong>假如今天定投：</strong>
+        </div>
+        <div class="info-row">
+          <label>当前周增幅：</label>
+          <span id="currentWeeklyIncreaseRate">--</span>
+        </div>
+        <div class="info-row">
+          <label>当前月增幅：</label>
+          <span id="currentMonthlyIncreaseRate">--</span>
+        </div>
+        <div class="info-row">
+          <label>假如今天定投：</label>
           <span id="currentInvestmentPercentage">--</span>
-        </p>
-
-        <p>
-          <strong>连续下跌周数：</strong>
+        </div>
+        <div class="info-row">
+          <label>连续下跌周数：</label>
           <span id="consecutiveDownDays">0</span>
-        </p>
+        </div>
       </div>
-      <button id="executeInvestment">如果定投完成请点击</button>
+      <button id="executeInvestment" class="action-button">
+        如果定投完成请点击
+      </button>
       <div id="statusMessage"></div>
 
       <!-- 行情趋势部分 -->
-      <div class="trends">
-        <h3>行情趋势</h3>
-        <div class="trend">
-          <p><strong>纳斯达克趋势：</strong></p>
-          <p id="nasdaqTrends">
-            上上周（加载中...） | 上周（加载中...） | 本周（加载中...）
-          </p>
-        </div>
-        <div class="trend">
-          <p><strong>标普500趋势：</strong></p>
-          <p id="sp500Trends">
-            上上周（加载中...） | 上周（加载中...） | 本周（加载中...）
-          </p>
+      <div class="trends-card">
+        <div class="trends-card">
+          <h3>行情趋势</h3>
+          <div class="trend-container">
+            <div class="trend-item">
+              <label>纳斯达克趋势：</label>
+              <div class="trend-cards" id="nasdaqTrends">
+                <div class="trend-card">上上周 (加载中...)</div>
+                <div class="trend-card">上周 (加载中...)</div>
+                <div class="trend-card">本周 (加载中...)</div>
+              </div>
+            </div>
+            <div class="trend-item">
+              <label>标普500趋势：</label>
+              <div class="trend-cards" id="sp500Trends">
+                <div class="trend-card">上上周 (加载中...)</div>
+                <div class="trend-card">上周 (加载中...)</div>
+                <div class="trend-card">本周 (加载中...)</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="status-container">

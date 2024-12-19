@@ -140,11 +140,69 @@ function updateETFTrendsUI(data) {
   const nasdaqRefreshed = data.nasdaqRefreshed;
   const sp500Refreshed = data.sp500Refreshed;
 
-  const nasdaqTrends = getTrendString(nasdaqEntries, nasdaqRefreshed);
-  const sp500Trends = getTrendString(sp500Entries, sp500Refreshed);
+  const updateCards = (entries, containerId, lastRefreshed) => {
+    const cards = document.querySelectorAll(`#${containerId} .trend-card`);
+    if (entries.length < 3) {
+      cards.forEach((card) => (card.textContent = "数据不足"));
+      return;
+    }
 
-  document.getElementById("nasdaqTrends").innerText = nasdaqTrends;
-  document.getElementById("sp500Trends").innerText = sp500Trends;
+    const lastRefreshedDate = new Date(lastRefreshed);
+    const getWeekLabel = (date, lastRefreshedDate, index) => {
+      const entryDate = new Date(date);
+      const diffInDays = Math.round(
+        (lastRefreshedDate - entryDate) / (1000 * 60 * 60 * 24)
+      );
+      if (index === 0) {
+        return "本周";
+      } else if (diffInDays < 7 && index === 1) {
+        return "上周";
+      } else if (diffInDays < 14 && index === 2) {
+        return "上上周";
+      } else if (diffInDays < 14 && index === 1) {
+        return "上周";
+      } else if (diffInDays < 21 && index === 2) {
+        return "上上周";
+      } else {
+        return "更早";
+      }
+    };
+    cards.forEach((card, index) => {
+      if (entries[index]) {
+        const currentDate = entries[index][0].split("-").slice(1).join("-");
+        const currentPrice = parseFloat(entries[index][1]["4. close"]);
+
+        let priceChange = 0;
+        if (index < entries.length - 1 && entries[index + 1]) {
+          const previousPrice = parseFloat(entries[index + 1][1]["4. close"]);
+          priceChange = currentPrice - previousPrice;
+        }
+
+        const weekLabel = getWeekLabel(
+          entries[index][0],
+          lastRefreshedDate,
+          index
+        );
+        card.innerHTML = `${weekLabel} (${currentDate}):<br>${formatPrice(
+          currentPrice
+        )}`;
+
+        // 根据价格变化添加类名
+        card.classList.remove("positive", "negative");
+        if (priceChange > 0) {
+          card.classList.add("positive");
+        } else if (priceChange < 0) {
+          card.classList.add("negative");
+        }
+      } else {
+        card.textContent = "数据不足";
+        card.classList.remove("positive", "negative");
+      }
+    });
+  };
+
+  updateCards(nasdaqEntries, "nasdaqTrends", nasdaqRefreshed);
+  updateCards(sp500Entries, "sp500Trends", sp500Refreshed);
 
   const consecutiveDownDays = calculateConsecutiveDownDays(
     nasdaqEntries,
@@ -154,7 +212,6 @@ function updateETFTrendsUI(data) {
   document.getElementById("consecutiveDownDays").innerText =
     consecutiveDownDays;
 }
-
 function formatPrice(price) {
   return `$${parseFloat(price).toFixed(2)}`;
 }
