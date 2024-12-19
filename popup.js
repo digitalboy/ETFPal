@@ -5,6 +5,7 @@ import {
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,
+  defaultIncreaseRate,
 } from "./investmentStrategy.js";
 
 const nasdaqSymbol = "QQQ";
@@ -15,11 +16,21 @@ const investmentFrequency = "weekly";
 document.addEventListener("DOMContentLoaded", initialize);
 
 function initialize() {
+  loadIncreaseRate();
   displayInvestmentInfo();
   displayETFTrends();
   document
     .getElementById("executeInvestment")
     .addEventListener("click", executeInvestment);
+  document
+    .getElementById("openSettings")
+    .addEventListener("click", openSettingsPage);
+}
+// 打开设置页面
+function openSettingsPage() {
+  console.log("设置按钮点击");
+  //  chrome.runtime.openOptionsPage();
+  chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
 }
 
 function logStatus(message, type = "info") {
@@ -186,10 +197,17 @@ function getTrendString(entries, lastRefreshed) {
     1
   )} | ${formatData(entries[2], 2)}`;
 }
-
+function loadIncreaseRate() {
+  chrome.storage.local.get(["increaseRate"], function (result) {
+    const increaseRate = result.increaseRate || defaultIncreaseRate;
+    document.getElementById("currentIncreaseRate").innerText =
+      increaseRate + "%";
+  });
+}
 function displayInvestmentInfo() {
-  chrome.storage.local.get(["investments"], function (result) {
+  chrome.storage.local.get(["investments", "increaseRate"], function (result) {
     const investments = result.investments || [];
+    const increaseRate = result.increaseRate || defaultIncreaseRate;
     const lastInvestment = investments[investments.length - 1];
     const today = getLocalDate();
     const lastInvestmentDate = lastInvestment ? lastInvestment.date : null;
@@ -213,8 +231,10 @@ function displayInvestmentInfo() {
       document.getElementById("consecutiveDownDays").innerText,
       10
     );
-    const investmentPercentage =
-      calculateInvestmentPercentage(consecutiveDownDays);
+    const investmentPercentage = calculateInvestmentPercentage(
+      consecutiveDownDays,
+      increaseRate
+    );
     document.getElementById("currentInvestmentPercentage").innerText =
       investmentPercentage + "%";
   });
@@ -225,35 +245,40 @@ function executeInvestment() {
     document.getElementById("consecutiveDownDays").innerText,
     10
   );
-  const investmentPercentage =
-    calculateInvestmentPercentage(consecutiveDownDays);
-  const investmentAmount = calculateInvestmentAmount(investmentPercentage);
-  const today = getLocalDate();
-  fetchWeeklyETFData()
-    .then((data) => {
-      const nasdaqLatest = Object.entries(data.nasdaq)[0];
-      const sp500Latest = Object.entries(data.sp500)[0];
+  chrome.storage.local.get(["increaseRate"], function (result) {
+    const increaseRate = result.increaseRate || defaultIncreaseRate;
+    const investmentPercentage = calculateInvestmentPercentage(
+      consecutiveDownDays,
+      increaseRate
+    );
+    const investmentAmount = calculateInvestmentAmount(investmentPercentage);
+    const today = getLocalDate();
+    fetchWeeklyETFData()
+      .then((data) => {
+        const nasdaqLatest = Object.entries(data.nasdaq)[0];
+        const sp500Latest = Object.entries(data.sp500)[0];
 
-      const prices = {
-        nasdaq: parseFloat(nasdaqLatest[1]["4. close"]),
-        sp500: parseFloat(sp500Latest[1]["4. close"]),
-      };
+        const prices = {
+          nasdaq: parseFloat(nasdaqLatest[1]["4. close"]),
+          sp500: parseFloat(sp500Latest[1]["4. close"]),
+        };
 
-      chrome.storage.local.get(["investments"], function (result) {
-        const investments = result.investments || [];
-        investments.push({
-          date: today.toISOString().split("T")[0],
-          amount: investmentAmount,
-          prices,
+        chrome.storage.local.get(["investments"], function (result) {
+          const investments = result.investments || [];
+          investments.push({
+            date: today.toISOString().split("T")[0],
+            amount: investmentAmount,
+            prices,
+          });
+
+          chrome.storage.local.set({ investments }, function () {
+            logStatus("定投成功完成。", "success");
+            displayInvestmentInfo();
+          });
         });
-
-        chrome.storage.local.set({ investments }, function () {
-          logStatus("定投成功完成。", "success");
-          displayInvestmentInfo();
-        });
+      })
+      .catch((error) => {
+        logStatus(`定投操作失败: ${error.message}`, "error");
       });
-    })
-    .catch((error) => {
-      logStatus(`定投操作失败: ${error.message}`, "error");
-    });
+  });
 }

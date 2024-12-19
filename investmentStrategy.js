@@ -1,7 +1,7 @@
 // investmentStrategy.js
 
 const baseInvestmentAmount = 100; // 基础定投金额
-
+let defaultIncreaseRate = 10; // 默认增幅比例
 /**
  * 计算连续下跌周数
  * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每周数据
@@ -40,13 +40,17 @@ function calculateConsecutiveDownDays(nasdaqEntries, sp500Entries) {
 /**
  * 根据连续下跌周数计算投资百分比
  * @param {number} consecutiveDownDays - 连续下跌周数
+ * @param {number} increaseRate - 增幅
  * @returns {number} 投资百分比
  */
-function calculateInvestmentPercentage(consecutiveDownDays) {
+function calculateInvestmentPercentage(
+  consecutiveDownDays,
+  increaseRate = defaultIncreaseRate
+) {
   if (consecutiveDownDays <= 0) {
     return 100;
   }
-  return 100 + consecutiveDownDays * 10;
+  return 100 + consecutiveDownDays * increaseRate;
 }
 
 /**
@@ -131,4 +135,5 @@ export {
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,
+  defaultIncreaseRate,
 };

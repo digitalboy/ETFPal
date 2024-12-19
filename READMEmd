@@ -19,11 +19,14 @@
 - 记录和显示状态消息
 
 ## 文件结构
-background.js：扩展的后台脚本（目前为空）。
+background.js：扩展的后台脚本。
 icons：包含扩展的图标文件。
 manifest.json：定义了扩展的元数据和权限。
 popup.html：定义了扩展的弹出页面结构。
 popup.js：包含弹出页面的逻辑。
+investmentStrategy.js ：包含定投策略的逻辑。
+options.html：定义了扩展的选项页面结构。
+options.js：包含选项页面的逻辑。
 styles.css：定义了弹出页面的样式。
 
 ## 数据来源
