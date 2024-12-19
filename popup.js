@@ -7,8 +7,8 @@ import {
   calculateConsecutiveUpMonths,
 } from "./investmentStrategy.js";
 
-const nasdaqSymbol = "QQQ";
-const sp500Symbol = "SPY";
+const nasdaqSymbol = "QQQ_weekly";
+const sp500Symbol = "SPY_weekly";
 const investmentFrequency = "weekly"; // 默认每周
 
 let investmentDay;
