@@ -1,9 +1,16 @@
 // popup.js
 
+import {
+  calculateConsecutiveDownDays,
+  calculateInvestmentPercentage,
+  calculateInvestmentAmount,
+  calculateNextInvestmentDate,
+} from "./investmentStrategy.js";
+
 const nasdaqSymbol = "QQQ";
 const sp500Symbol = "SPY";
-const baseInvestmentAmount = 100;
 const investmentDay = 2; // Tuesday
+const investmentFrequency = "weekly";
 
 document.addEventListener("DOMContentLoaded", initialize);
 
@@ -138,32 +145,6 @@ function updateETFTrendsUI(data) {
     consecutiveDownDays;
 }
 
-function calculateConsecutiveDownDays(nasdaqEntries, sp500Entries) {
-  let nasdaqDownDays = 0;
-  let sp500DownDays = 0;
-
-  for (let i = 1; i < nasdaqEntries.length; i++) {
-    const prevClose = parseFloat(nasdaqEntries[i - 1][1]["4. close"]);
-    const currClose = parseFloat(nasdaqEntries[i][1]["4. close"]);
-    if (currClose < prevClose) {
-      nasdaqDownDays++;
-    } else {
-      break;
-    }
-  }
-  for (let i = 1; i < sp500Entries.length; i++) {
-    const prevClose = parseFloat(sp500Entries[i - 1][1]["4. close"]);
-    const currClose = parseFloat(sp500Entries[i][1]["4. close"]);
-    if (currClose < prevClose) {
-      sp500DownDays++;
-    } else {
-      break;
-    }
-  }
-
-  return Math.max(nasdaqDownDays, sp500DownDays);
-}
-
 function formatPrice(price) {
   return `$${parseFloat(price).toFixed(2)}`;
 }
@@ -211,17 +192,20 @@ function displayInvestmentInfo() {
     const investments = result.investments || [];
     const lastInvestment = investments[investments.length - 1];
     const today = getLocalDate();
+    const lastInvestmentDate = lastInvestment ? lastInvestment.date : null;
 
-    if (lastInvestment) {
+    if (lastInvestmentDate) {
       document.getElementById("lastInvestmentDate").innerText =
-        lastInvestment.date;
+        lastInvestmentDate;
     } else {
       document.getElementById("lastInvestmentDate").innerText = "暂无记录";
     }
 
     const nextDate = calculateNextInvestmentDate(
-      lastInvestment ? lastInvestment.date : null,
-      today
+      lastInvestmentDate,
+      today,
+      investmentFrequency,
+      investmentDay
     );
     document.getElementById("nextInvestmentDate").innerText = nextDate;
 
@@ -236,13 +220,6 @@ function displayInvestmentInfo() {
   });
 }
 
-function calculateInvestmentPercentage(consecutiveDownDays) {
-  if (consecutiveDownDays <= 0) {
-    return 100;
-  }
-  return 100 + consecutiveDownDays * 10;
-}
-
 function executeInvestment() {
   const consecutiveDownDays = parseInt(
     document.getElementById("consecutiveDownDays").innerText,
@@ -250,7 +227,7 @@ function executeInvestment() {
   );
   const investmentPercentage =
     calculateInvestmentPercentage(consecutiveDownDays);
-  const investmentAmount = (baseInvestmentAmount * investmentPercentage) / 100;
+  const investmentAmount = calculateInvestmentAmount(investmentPercentage);
   const today = getLocalDate();
   fetchWeeklyETFData()
     .then((data) => {
@@ -279,21 +256,4 @@ function executeInvestment() {
     .catch((error) => {
       logStatus(`定投操作失败: ${error.message}`, "error");
     });
-}
-
-function calculateNextInvestmentDate(lastDateStr, today) {
-  let nextDate = today;
-
-  if (lastDateStr) {
-    nextDate = new Date(lastDateStr);
-    nextDate.setDate(nextDate.getDate() + 7);
-  }
-
-  const dayOfWeek = nextDate.getDay();
-  const daysUntilTuesday = (investmentDay - dayOfWeek + 7) % 7;
-  nextDate.setDate(nextDate.getDate() + daysUntilTuesday);
-
-  return `${nextDate.getFullYear()}-${(nextDate.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${nextDate.getDate().toString().padStart(2, "0")}`;
 }
