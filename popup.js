@@ -89,8 +89,8 @@ function validateAPIResponse(response) {
 }
 
 function fetchWeeklyETFData() {
-  const nasdaqURL = `https://eft-pal-data-provider.digitalboyzone.workers.dev/?etf=${nasdaqSymbol}`;
-  const sp500URL = `https://eft-pal-data-provider.digitalboyzone.workers.dev/?etf=${sp500Symbol}`;
+  const nasdaqURL = `https://etf-pal-weekly-data-getter.digitalboyzone.workers.dev/?etf=${nasdaqSymbol}`;
+  const sp500URL = `https://etf-pal-weekly-data-getter.digitalboyzone.workers.dev/?etf=${sp500Symbol}`;
 
   return Promise.all([
     fetch(nasdaqURL).then((response) => response.json()),
