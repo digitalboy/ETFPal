@@ -1,0 +1,74 @@
+# ETF 定投助手
+
+一个简单的 ETF 定投决策工具，支持纳斯达克和标普500 ETF。
+
+## 策略
+- 连续 3 周下跌则退出
+- 每周定投基数 100%
+- 如果前两周连续下跌，则投入110%
+- 如果前三周连续下跌，则投入120%
+- 如果前四周连续下跌，则投入130%
+- 以此类推
+
+## 功能
+
+- 显示下个定投日和上个定投日
+- 显示假如今天定投的百分比
+- 显示连续下跌天数
+- 显示纳斯达克和标普500的趋势数据
+- 记录和显示状态消息
+
+## 文件结构
+background.js：扩展的后台脚本（目前为空）。
+icons：包含扩展的图标文件。
+manifest.json：定义了扩展的元数据和权限。
+popup.html：定义了扩展的弹出页面结构。
+popup.js：包含弹出页面的逻辑。
+styles.css：定义了弹出页面的样式。
+
+## 数据来源
+https://eft-pal-data-provider.digitalboyzone.workers.dev/?etf=QQQ
+https://eft-pal-data-provider.digitalboyzone.workers.dev/?etf=SPY
+
+## 数据样式
+```
+{
+"Meta Data": {
+"1. Information": "Weekly Prices (open, high, low, close) and Volumes",
+"2. Symbol": "QQQ",
+"3. Last Refreshed": "2024-12-18",
+"4. Time Zone": "US/Eastern"
+},
+"Weekly Time Series": {
+"2024-12-18": {
+"1. open": "533.0800",
+"2. high": "539.1500",
+"3. low": "515.0100",
+"4. close": "516.4700",
+"5. volume": "115262088"
+},
+"2024-12-13": {
+"1. open": "525.5500",
+"2. high": "533.1661",
+"3. low": "519.1600",
+"4. close": "530.5300",
+"5. volume": "129550933"
+},
+"2024-12-06": {
+"1. open": "511.0100",
+"2. high": "526.7200",
+"3. low": "510.6200",
+"4. close": "526.4800",
+"5. volume": "111763530"
+},
+"2024-11-29": {
+"1. open": "509.9000",
+"2. high": "511.4525",
+"3. low": "501.9300",
+"4. close": "509.7400",
+"5. volume": "93223636"
+},
+
+...
+}
+```
