@@ -1,5 +1,5 @@
 import {
-  calculateConsecutiveDownDays,
+  calculateConsecutiveDownWeeks,
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,
@@ -234,13 +234,13 @@ function updateETFTrendsUI(data) {
     updateCards(monthlyNasdaqEntries, "nasdaqMonthlyTrends", nasdaqRefreshed, true);
     updateCards(monthlySP500Entries, "sp500MonthlyTrends", sp500Refreshed,true);
 
-  const consecutiveDownDays = calculateConsecutiveDownDays(
+  const consecutiveDownWeeks = calculateConsecutiveDownWeeks(
     nasdaqEntries,
     sp500Entries,
     investmentFrequency
   );
   document.getElementById("consecutiveDownDays").innerText =
-    consecutiveDownDays;
+    consecutiveDownWeeks;
 
   const consecutiveUpMonths = calculateConsecutiveUpMonths(
       nasdaqEntries,

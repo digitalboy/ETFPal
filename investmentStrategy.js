@@ -9,7 +9,7 @@ let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例
  * @param {string} frequency - 定投周期，可选值 'weekly', 'monthly'
  * @returns {number} 最小连续下跌周期数
  */
-function calculateConsecutiveDownDays(
+function calculateConsecutiveDownWeeks(
   nasdaqEntries,
   sp500Entries,
   frequency = "weekly"
@@ -202,7 +202,7 @@ function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
 }
 
 export {
-  calculateConsecutiveDownDays,
+  calculateConsecutiveDownWeeks,
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,
