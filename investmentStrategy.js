@@ -1,62 +1,76 @@
 // investmentStrategy.js
-
 const baseInvestmentAmount = 100; // 基础定投金额
-let defaultIncreaseRate = 10; // 默认增幅比例
-/**
- * 计算连续下跌周数
- * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每周数据
- * @param {Array<Array<[string, Object]>>} sp500Entries - 标普500 ETF 的每周数据
- * @returns {number} 最小连续下跌周数
- */
-function calculateConsecutiveDownDays(nasdaqEntries, sp500Entries) {
-  let nasdaqDownDays = 0;
-  let sp500DownDays = 0;
+let defaultIncreaseRate = 10; // 默认周增幅比例
+let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例
 
-  // 计算纳斯达克连续下跌周数
+/**
+ * 计算连续下跌周期数（周/月）
+ * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每周/月数据
+ * @param {Array<Array<[string, Object]>>} sp500Entries - 标普500 ETF 的每周/月数据
+ * @param {string} frequency - 定投周期，可选值 'weekly', 'monthly'
+ * @returns {number} 最小连续下跌周期数
+ */
+function calculateConsecutiveDownDays(
+  nasdaqEntries,
+  sp500Entries,
+  frequency = "weekly"
+) {
+  let nasdaqDownPeriods = 0;
+  let sp500DownPeriods = 0;
+
+  // 计算纳斯达克连续下跌周期数
   for (let i = 1; i < nasdaqEntries.length; i++) {
     const prevClose = parseFloat(nasdaqEntries[i - 1][1]["4. close"]);
     const currClose = parseFloat(nasdaqEntries[i][1]["4. close"]);
     if (currClose < prevClose) {
-      nasdaqDownDays++;
+      nasdaqDownPeriods++;
     } else {
       break;
     }
   }
-  // 计算标普500连续下跌周数
+  // 计算标普500连续下跌周期数
   for (let i = 1; i < sp500Entries.length; i++) {
     const prevClose = parseFloat(sp500Entries[i - 1][1]["4. close"]);
     const currClose = parseFloat(sp500Entries[i][1]["4. close"]);
     if (currClose < prevClose) {
-      sp500DownDays++;
+      sp500DownPeriods++;
     } else {
       break;
     }
   }
 
-  // 返回纳斯达克和标普500中连续下跌周数的最小值
-  return Math.min(nasdaqDownDays, sp500DownDays);
+  // 返回纳斯达克和标普500中连续下跌周期数的最小值
+  return Math.min(nasdaqDownPeriods, sp500DownPeriods);
 }
 
 /**
- * 根据连续下跌周数计算投资百分比
- * @param {number} consecutiveDownDays - 连续下跌周数
+ * 根据连续下跌周期数计算投资百分比
+ * @param {number} consecutiveDownPeriods - 连续下跌周期数
+ *  @param {string} investmentFrequency - 定投周期，可选值 'weekly', 'monthly'
  * @param {number} increaseRate - 增幅
  * @returns {number} 投资百分比
  */
 function calculateInvestmentPercentage(
-  consecutiveDownDays,
-  increaseRate = defaultIncreaseRate
+  consecutiveDownPeriods,
+  investmentFrequency,
+  increaseRate = defaultIncreaseRate,
+  monthlyIncreaseRate = defaultMonthlyIncreaseRate
 ) {
-  if (consecutiveDownDays <= 0) {
+  let currentIncreaseRate = increaseRate;
+  if (investmentFrequency === "monthly") {
+    currentIncreaseRate = monthlyIncreaseRate;
+  }
+
+  if (consecutiveDownPeriods <= 0) {
     return 100;
   }
-  return 100 + consecutiveDownDays * increaseRate;
+  return 100 + consecutiveDownPeriods * currentIncreaseRate;
 }
 
 /**
  * 根据投资百分比计算投资金额
  * @param {number} investmentPercentage - 投资百分比
- *  @returns {number} 投资金额
+ * @returns {number} 投资金额
  */
 function calculateInvestmentAmount(investmentPercentage) {
   return (baseInvestmentAmount * investmentPercentage) / 100;

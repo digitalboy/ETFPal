@@ -1,5 +1,3 @@
-// popup.js
-
 import {
   calculateConsecutiveDownDays,
   calculateInvestmentPercentage,
@@ -10,27 +8,27 @@ import {
 
 const nasdaqSymbol = "QQQ";
 const sp500Symbol = "SPY";
-const investmentDay = 2; // Tuesday
-const investmentFrequency = "weekly";
+const investmentFrequency = "weekly"; // 默认每周
+
+let investmentDay;
 
 document.addEventListener("DOMContentLoaded", initialize);
 
 function initialize() {
   loadIncreaseRate();
+  loadInvestmentDay();
   displayInvestmentInfo();
   displayETFTrends();
   document
     .getElementById("executeInvestment")
     .addEventListener("click", executeInvestment);
+
   document
-    .getElementById("openSettings")
-    .addEventListener("click", openSettingsPage);
-}
-// 打开设置页面
-function openSettingsPage() {
-  console.log("设置按钮点击");
-  //  chrome.runtime.openOptionsPage();
-  chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
+    .getElementById("toggleSettings")
+    .addEventListener("click", toggleSettings);
+  document
+    .getElementById("saveSettings")
+    .addEventListener("click", saveSettings);
 }
 
 function logStatus(message, type = "info") {
@@ -150,7 +148,8 @@ function updateETFTrendsUI(data) {
 
   const consecutiveDownDays = calculateConsecutiveDownDays(
     nasdaqEntries,
-    sp500Entries
+    sp500Entries,
+    investmentFrequency
   );
   document.getElementById("consecutiveDownDays").innerText =
     consecutiveDownDays;
@@ -198,46 +197,70 @@ function getTrendString(entries, lastRefreshed) {
   )} | ${formatData(entries[2], 2)}`;
 }
 function loadIncreaseRate() {
-  chrome.storage.local.get(["increaseRate"], function (result) {
-    const increaseRate = result.increaseRate || defaultIncreaseRate;
-    document.getElementById("currentIncreaseRate").innerText =
-      increaseRate + "%";
+  chrome.storage.local.get(
+    ["increaseRate", "monthlyIncreaseRate"],
+    function (result) {
+      const increaseRate = result.increaseRate || defaultIncreaseRate;
+      const monthlyIncreaseRate =
+        result.monthlyIncreaseRate || defaultIncreaseRate;
+      document.getElementById("increaseRate").value = increaseRate;
+      document.getElementById("monthlyIncreaseRate").value =
+        monthlyIncreaseRate;
+      document.getElementById("currentWeeklyIncreaseRate").innerText =
+        increaseRate + "%";
+      document.getElementById("currentMonthlyIncreaseRate").innerText =
+        monthlyIncreaseRate + "%";
+    }
+  );
+}
+function loadInvestmentDay() {
+  chrome.storage.local.get(["investmentDay"], function (result) {
+    investmentDay = result.investmentDay || 2;
+    document.getElementById("investmentDay").value = investmentDay;
   });
 }
 function displayInvestmentInfo() {
-  chrome.storage.local.get(["investments", "increaseRate"], function (result) {
-    const investments = result.investments || [];
-    const increaseRate = result.increaseRate || defaultIncreaseRate;
-    const lastInvestment = investments[investments.length - 1];
-    const today = getLocalDate();
-    const lastInvestmentDate = lastInvestment ? lastInvestment.date : null;
+  chrome.storage.local.get(
+    ["investments", "increaseRate", "monthlyIncreaseRate", "investmentDay"],
+    function (result) {
+      const investments = result.investments || [];
+      const increaseRate = result.increaseRate || defaultIncreaseRate;
+      const monthlyIncreaseRate =
+        result.monthlyIncreaseRate || defaultIncreaseRate;
+      investmentDay = result.investmentDay || 2;
+      const lastInvestment = investments[investments.length - 1];
+      const today = getLocalDate();
+      const lastInvestmentDate = lastInvestment ? lastInvestment.date : null;
 
-    if (lastInvestmentDate) {
-      document.getElementById("lastInvestmentDate").innerText =
-        lastInvestmentDate;
-    } else {
-      document.getElementById("lastInvestmentDate").innerText = "暂无记录";
+      if (lastInvestmentDate) {
+        document.getElementById("lastInvestmentDate").innerText =
+          lastInvestmentDate;
+      } else {
+        document.getElementById("lastInvestmentDate").innerText = "暂无记录";
+      }
+
+      const nextDate = calculateNextInvestmentDate(
+        lastInvestmentDate,
+        today,
+        investmentFrequency,
+        investmentDay
+      );
+      document.getElementById("nextInvestmentDate").innerText = nextDate;
+
+      const consecutiveDownDays = parseInt(
+        document.getElementById("consecutiveDownDays").innerText,
+        10
+      );
+      const investmentPercentage = calculateInvestmentPercentage(
+        consecutiveDownDays,
+        investmentFrequency,
+        increaseRate,
+        monthlyIncreaseRate
+      );
+      document.getElementById("currentInvestmentPercentage").innerText =
+        investmentPercentage + "%";
     }
-
-    const nextDate = calculateNextInvestmentDate(
-      lastInvestmentDate,
-      today,
-      investmentFrequency,
-      investmentDay
-    );
-    document.getElementById("nextInvestmentDate").innerText = nextDate;
-
-    const consecutiveDownDays = parseInt(
-      document.getElementById("consecutiveDownDays").innerText,
-      10
-    );
-    const investmentPercentage = calculateInvestmentPercentage(
-      consecutiveDownDays,
-      increaseRate
-    );
-    document.getElementById("currentInvestmentPercentage").innerText =
-      investmentPercentage + "%";
-  });
+  );
 }
 
 function executeInvestment() {
@@ -245,40 +268,77 @@ function executeInvestment() {
     document.getElementById("consecutiveDownDays").innerText,
     10
   );
-  chrome.storage.local.get(["increaseRate"], function (result) {
-    const increaseRate = result.increaseRate || defaultIncreaseRate;
-    const investmentPercentage = calculateInvestmentPercentage(
-      consecutiveDownDays,
-      increaseRate
-    );
-    const investmentAmount = calculateInvestmentAmount(investmentPercentage);
-    const today = getLocalDate();
-    fetchWeeklyETFData()
-      .then((data) => {
-        const nasdaqLatest = Object.entries(data.nasdaq)[0];
-        const sp500Latest = Object.entries(data.sp500)[0];
+  chrome.storage.local.get(
+    ["increaseRate", "monthlyIncreaseRate", "investmentDay"],
+    function (result) {
+      const increaseRate = result.increaseRate || defaultIncreaseRate;
+      const monthlyIncreaseRate =
+        result.monthlyIncreaseRate || defaultIncreaseRate;
+      investmentDay = result.investmentDay || 2;
+      const investmentPercentage = calculateInvestmentPercentage(
+        consecutiveDownDays,
+        investmentFrequency,
+        increaseRate,
+        monthlyIncreaseRate
+      );
+      const investmentAmount = calculateInvestmentAmount(investmentPercentage);
+      const today = getLocalDate();
+      fetchWeeklyETFData()
+        .then((data) => {
+          const nasdaqLatest = Object.entries(data.nasdaq)[0];
+          const sp500Latest = Object.entries(data.sp500)[0];
 
-        const prices = {
-          nasdaq: parseFloat(nasdaqLatest[1]["4. close"]),
-          sp500: parseFloat(sp500Latest[1]["4. close"]),
-        };
+          const prices = {
+            nasdaq: parseFloat(nasdaqLatest[1]["4. close"]),
+            sp500: parseFloat(sp500Latest[1]["4. close"]),
+          };
 
-        chrome.storage.local.get(["investments"], function (result) {
-          const investments = result.investments || [];
-          investments.push({
-            date: today.toISOString().split("T")[0],
-            amount: investmentAmount,
-            prices,
+          chrome.storage.local.get(["investments"], function (result) {
+            const investments = result.investments || [];
+            investments.push({
+              date: today.toISOString().split("T")[0],
+              amount: investmentAmount,
+              prices,
+            });
+
+            chrome.storage.local.set({ investments }, function () {
+              logStatus("定投成功完成。", "success");
+              displayInvestmentInfo();
+            });
           });
-
-          chrome.storage.local.set({ investments }, function () {
-            logStatus("定投成功完成。", "success");
-            displayInvestmentInfo();
-          });
+        })
+        .catch((error) => {
+          logStatus(`定投操作失败: ${error.message}`, "error");
         });
-      })
-      .catch((error) => {
-        logStatus(`定投操作失败: ${error.message}`, "error");
-      });
-  });
+    }
+  );
+}
+
+function toggleSettings() {
+  const settingsContainer = document.getElementById("settingsContainer");
+  settingsContainer.classList.toggle("hidden");
+}
+
+function saveSettings() {
+  const increaseRate = document.getElementById("increaseRate").value;
+  const monthlyIncreaseRate = document.getElementById(
+    "monthlyIncreaseRate"
+  ).value;
+  const investmentDay = document.getElementById("investmentDay").value;
+  chrome.storage.local.set(
+    {
+      increaseRate: parseInt(increaseRate),
+      monthlyIncreaseRate: parseInt(monthlyIncreaseRate),
+      investmentDay: parseInt(investmentDay),
+    },
+    function () {
+      const status = document.getElementById("settingsStatus");
+      status.textContent = "设置已保存。";
+      setTimeout(function () {
+        status.textContent = "";
+      }, 750);
+      loadIncreaseRate();
+      loadInvestmentDay();
+    }
+  );
 }

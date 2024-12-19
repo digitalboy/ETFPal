@@ -5,14 +5,26 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadIncreaseRate() {
-  chrome.storage.local.get("increaseRate", function (data) {
-    document.getElementById("increaseRate").value = data.increaseRate || 10;
-  });
+  chrome.storage.local.get(
+    ["increaseRate", "monthlyIncreaseRate"],
+    function (data) {
+      document.getElementById("increaseRate").value = data.increaseRate || 10;
+      document.getElementById("monthlyIncreaseRate").value =
+        data.monthlyIncreaseRate || 10;
+    }
+  );
 }
 function saveOptions() {
   const increaseRate = document.getElementById("increaseRate").value;
+  const monthlyIncreaseRate = document.getElementById(
+    "monthlyIncreaseRate"
+  ).value;
+
   chrome.storage.local.set(
-    { increaseRate: parseInt(increaseRate) },
+    {
+      increaseRate: parseInt(increaseRate),
+      monthlyIncreaseRate: parseInt(monthlyIncreaseRate),
+    },
     function () {
       const status = document.getElementById("status");
       status.textContent = "设置已保存。";

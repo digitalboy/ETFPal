@@ -8,7 +8,26 @@
   <body>
     <div class="container">
       <h2>ETF定投助手</h2>
-        <button id="openSettings">设置</button>
+      <div class="settings-header">
+        <button id="toggleSettings">设置</button>
+      </div>
+      <div id="settingsContainer" class="settings-container hidden">
+        <label for="increaseRate">周增幅比例 (%):</label>
+        <input type="number" id="increaseRate" value="10" /><br />
+        <label for="monthlyIncreaseRate">月增幅比例 (%):</label>
+        <input type="number" id="monthlyIncreaseRate" value="10" /><br />
+          <label for="investmentDay">每周定投日:</label>
+          <select id="investmentDay">
+              <option value="1">周一</option>
+              <option value="2">周二</option>
+              <option value="3">周三</option>
+              <option value="4">周四</option>
+              <option value="5">周五</option>
+          </select><br />
+        <button id="saveSettings">保存设置</button>
+          <div id="settingsStatus"></div>
+      </div>
+
       <div class="info">
         <p>
           <strong>下个定投日：</strong>
@@ -18,14 +37,19 @@
           <strong>上个定投日：</strong>
           <span id="lastInvestmentDate">暂无记录</span>
         </p>
+          <p>
+              <strong>当前周增幅：</strong>
+              <span id="currentWeeklyIncreaseRate">--</span>
+          </p>
+            <p>
+              <strong>当前月增幅：</strong>
+              <span id="currentMonthlyIncreaseRate">--</span>
+          </p>
         <p>
           <strong>假如今天定投：</strong>
           <span id="currentInvestmentPercentage">--</span>
         </p>
-          <p>
-              <strong>当前增幅：</strong>
-              <span id="currentIncreaseRate">--</span>
-          </p>
+
         <p>
           <strong>连续下跌周数：</strong>
           <span id="consecutiveDownDays">0</span>
