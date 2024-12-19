@@ -68,8 +68,12 @@
           <label>连续下跌周数：</label>
           <span id="consecutiveDownDays">0</span>
         </div>
+        <div class="info-row">
+          <label>连续上涨月数：</label>
+          <span id="consecutiveUpMonths">0</span>
+        </div>
       </div>
-      <button id="executeInvestment" class="action-button">
+      <button id="executeInvestment" class="action-button hidden">
         如果定投完成请点击
       </button>
       <div id="statusMessage"></div>
@@ -77,10 +81,10 @@
       <!-- 行情趋势部分 -->
       <div class="trends-card">
         <div class="trends-card">
-          <h3>行情趋势</h3>
+          <h3>周行情趋势</h3>
           <div class="trend-container">
             <div class="trend-item">
-              <label>纳斯达克趋势：</label>
+              <label>纳斯达克100ETF(QQQ)趋势：</label>
               <div class="trend-cards" id="nasdaqTrends">
                 <div class="trend-card">上上周 (加载中...)</div>
                 <div class="trend-card">上周 (加载中...)</div>
@@ -88,7 +92,7 @@
               </div>
             </div>
             <div class="trend-item">
-              <label>标普500趋势：</label>
+              <label>标普500ETF(SPY)趋势：</label>
               <div class="trend-cards" id="sp500Trends">
                 <div class="trend-card">上上周 (加载中...)</div>
                 <div class="trend-card">上周 (加载中...)</div>
@@ -97,8 +101,29 @@
             </div>
           </div>
         </div>
+        <div class="trends-card">
+          <h3>月行情趋势</h3>
+          <div class="trend-container">
+            <div class="trend-item">
+              <label>纳斯达克100ETF(QQQ)趋势：</label>
+              <div class="trend-cards" id="nasdaqMonthlyTrends">
+                <div class="trend-card">上上月 (加载中...)</div>
+                <div class="trend-card">上月 (加载中...)</div>
+                <div class="trend-card">本月 (加载中...)</div>
+              </div>
+            </div>
+            <div class="trend-item">
+              <label>标普500ETF(SPY)趋势：</label>
+              <div class="trend-cards" id="sp500MonthlyTrends">
+                <div class="trend-card">上上月 (加载中...)</div>
+                <div class="trend-card">上月 (加载中...)</div>
+                <div class="trend-card">本月 (加载中...)</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="status-container">
+      <div class="status-container hidden">
         <textarea id="statusBox" readonly></textarea>
       </div>
     </div>

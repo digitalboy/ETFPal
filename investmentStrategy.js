@@ -1,4 +1,3 @@
-// investmentStrategy.js
 const baseInvestmentAmount = 100; // 基础定投金额
 let defaultIncreaseRate = 10; // 默认周增幅比例
 let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例
@@ -144,10 +143,69 @@ function calculateNextInvestmentDate(
     .padStart(2, "0")}-${nextDate.getDate().toString().padStart(2, "0")}`;
 }
 
+/**
+ * 计算连续上涨的月数
+ * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每周/月数据
+ * @param {Array<Array<[string, Object]>>} sp500Entries - 标普500 ETF 的每周/月数据
+ * @returns {number} 连续上涨的月数
+ */
+function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
+  if (
+    !nasdaqEntries ||
+    !sp500Entries ||
+    nasdaqEntries.length < 2 ||
+    sp500Entries.length < 2
+  ) {
+    return 0;
+  }
+
+  const getMonth = (dateString) => new Date(dateString).getMonth();
+  const getChange = (current, previous) =>
+    parseFloat(current[1]["4. close"]) - parseFloat(previous[1]["4. close"]);
+
+  let consecutiveUpMonths = 0;
+  let nasdaqUp = true;
+  let sp500Up = true;
+
+  for (
+    let i = 0;
+    i < Math.min(nasdaqEntries.length - 1, sp500Entries.length - 1);
+    i++
+  ) {
+    const currentMonthNasdaq = getMonth(nasdaqEntries[i][0]);
+    const previousMonthNasdaq = getMonth(nasdaqEntries[i + 1][0]);
+    const currentMonthSP500 = getMonth(sp500Entries[i][0]);
+    const previousMonthSP500 = getMonth(sp500Entries[i + 1][0]);
+
+    if (
+      currentMonthNasdaq !== previousMonthNasdaq ||
+      currentMonthSP500 !== previousMonthSP500
+    ) {
+      if (nasdaqUp && sp500Up) {
+        consecutiveUpMonths++;
+      } else {
+        break;
+      }
+      nasdaqUp = getChange(nasdaqEntries[i], nasdaqEntries[i + 1]) > 0;
+      sp500Up = getChange(sp500Entries[i], sp500Entries[i + 1]) > 0;
+    } else {
+      nasdaqUp = getChange(nasdaqEntries[i], nasdaqEntries[i + 1]) > 0;
+      sp500Up = getChange(sp500Entries[i], sp500Entries[i + 1]) > 0;
+    }
+  }
+
+  if (nasdaqUp && sp500Up) {
+    consecutiveUpMonths++;
+  }
+
+  return consecutiveUpMonths;
+}
+
 export {
   calculateConsecutiveDownDays,
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,
   defaultIncreaseRate,
+  calculateConsecutiveUpMonths,
 };
