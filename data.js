@@ -1,7 +1,11 @@
 // data.js
 import { getLocalDate } from "./utils.js";
 
-function calculateConsecutiveDownWeeks(nasdaqData, sp500Data, investmentFrequency) {
+function calculateConsecutiveDownWeeks(
+  nasdaqData,
+  sp500Data,
+  investmentFrequency
+) {
   if (!nasdaqData || !sp500Data) {
     return { nasdaq: 0, sp500: 0 };
   }
@@ -14,11 +18,11 @@ function calculateConsecutiveDownWeeks(nasdaqData, sp500Data, investmentFrequenc
   let nasdaqDownWeeks = 0;
   let sp500DownWeeks = 0;
 
-  // 计算纳斯达克连续下跌周数 (从上周开始)
+  // 计算纳斯达克连续下跌周数 (从上周开始，不包括本周)
   for (let i = 1; i < nasdaqEntries.length - 1; i++) {
     const currentPrice = parseFloat(nasdaqEntries[i][1]["4. close"]);
     const previousPrice = parseFloat(nasdaqEntries[i + 1][1]["4. close"]);
-    
+
     if (currentPrice < previousPrice) {
       nasdaqDownWeeks++;
     } else {
@@ -26,11 +30,11 @@ function calculateConsecutiveDownWeeks(nasdaqData, sp500Data, investmentFrequenc
     }
   }
 
-  // 计算标普500连续下跌周数 (从上周开始)
+  // 计算标普500连续下跌周数 (从上周开始，不包括本周)
   for (let i = 1; i < sp500Entries.length - 1; i++) {
     const currentPrice = parseFloat(sp500Entries[i][1]["4. close"]);
     const previousPrice = parseFloat(sp500Entries[i + 1][1]["4. close"]);
-    
+
     if (currentPrice < previousPrice) {
       sp500DownWeeks++;
     } else {
