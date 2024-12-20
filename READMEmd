@@ -3,10 +3,18 @@
 一个简单的 ETF 定投决策工具，支持纳斯达克和标普500 ETF。
 
 ## 策略
-- 连续 3 周下跌则退出
-- 每周定投基数 100%
+- 越跌越买入
+- 每周定投
+- 基数 100%
+- 周连续下跌（不含本周）
 - 如果前两周连续下跌，则投入110%
 - 如果前三周连续下跌，则投入120%
+- 如果前四周连续下跌，则投入130%
+- 以此类推
+
+- 月连续下跌（不含本月）
+- 如果前两个月连续下跌，则投入110%
+- 如果前三个月连续下跌，则投入120%
 - 如果前四周连续下跌，则投入130%
 - 以此类推
 
@@ -19,19 +27,26 @@
 - 记录和显示状态消息
 
 ## 文件结构
-background.js：扩展的后台脚本。
-icons：包含扩展的图标文件。
-manifest.json：定义了扩展的元数据和权限。
-popup.html：定义了扩展的弹出页面结构。
-popup.js：包含弹出页面的逻辑。
-investmentStrategy.js ：包含定投策略的逻辑。
-options.html：定义了扩展的选项页面结构。
-options.js：包含选项页面的逻辑。
-styles.css：定义了弹出页面的样式。
+- [background.js](background.js)：扩展的后台脚本。
+- [icons](icons)：包含扩展的图标文件。
+- [manifest.json](manifest.json)：定义了扩展的元数据和权限。
+- [popup.html](popup.html)：定义了扩展的弹出页面结构。
+- [popup.js](popup.js)：包含弹出页面的逻辑。
+- [investment.js](investment.js)：包含定投策略的逻辑。
+- [investmentStrategy.js](investmentStrategy.js)：包含定投策略的逻辑。
+- [styles.css](styles.css)：定义了弹出页面的样式。
+- [settings.js](settings.js)：包含设置页面的逻辑。
+- [ui.js](ui.js)：包含用户界面更新的逻辑。
+- [utils.js](utils.js)：包含实用工具函数。
+- [data.js](data.js)：包含数据处理逻辑。
+- [api.js](api.js)：包含与 API 交互的逻辑。
 
 ## 数据来源
-https://eft-pal-data-provider.digitalboyzone.workers.dev/?etf=QQQ
-https://eft-pal-data-provider.digitalboyzone.workers.dev/?etf=SPY
+https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_weekly
+https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=SPY_weekly
+
+https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly
+https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly
 
 ## 数据样式
 ```
@@ -73,5 +88,39 @@ https://eft-pal-data-provider.digitalboyzone.workers.dev/?etf=SPY
 },
 
 ...
+}
+```
+```
+{
+    "Meta Data": {
+        "1. Information": "Monthly Prices (open, high, low, close) and Volumes",
+        "2. Symbol": "QQQ",
+        "3. Last Refreshed": "2024-12-19",
+        "4. Time Zone": "US/Eastern"
+    },
+    "Monthly Time Series": {
+        "2024-12-19": {
+            "1. open": "511.0100",
+            "2. high": "539.1500",
+            "3. low": "510.6200",
+            "4. close": "514.1700",
+            "5. volume": "403018305"
+        },
+        "2024-11-29": {
+            "1. open": "485.5000",
+            "2. high": "515.5800",
+            "3. low": "484.2545",
+            "4. close": "509.7400",
+            "5. volume": "567729700"
+        },
+        "2024-10-31": {
+            "1. open": "487.7000",
+            "2. high": "501.3500",
+            "3. low": "477.4000",
+            "4. close": "483.8500",
+            "5. volume": "660234819"
+        },
+        ...
+    }
 }
 ```

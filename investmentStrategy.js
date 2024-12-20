@@ -1,3 +1,4 @@
+// file: investmentStrategy.js
 const baseInvestmentAmount = 100; // 基础定投金额
 let defaultWeeklyIncreaseRate = 10; // 默认周增幅比例
 let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例

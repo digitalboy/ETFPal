@@ -60,19 +60,30 @@ async function displayAllInfo() {
     logStatus(`加载数据失败: ${error.message}`, "error");
   }
 }
+
+// 显示投资数据
 async function displayInvestmentData(weeklyData, monthlyData) {
   const consecutiveDownWeeks = calculateConsecutiveDownWeeks(
     weeklyData.nasdaq,
     weeklyData.sp500,
     investmentFrequency
   );
-  document.getElementById("consecutiveDownDays").innerText =
-    consecutiveDownWeeks;
+  document.getElementById("consecutiveDownDaysQQQ").innerText =
+    consecutiveDownWeeks.nasdaq;
+  document.getElementById("consecutiveDownDaysSPY").innerText =
+    consecutiveDownWeeks.sp500;
 
   const consecutiveUpMonths = calculateConsecutiveUpMonths(
     monthlyData.nasdaq,
     monthlyData.sp500
   );
+
+  // 使用较小值来计算投资比例
+  const consecutiveDownWeeksMin = Math.min(
+    consecutiveDownWeeks.nasdaq,
+    consecutiveDownWeeks.sp500
+  );
+
   document.getElementById("consecutiveUpMonths").innerText =
     consecutiveUpMonths;
   chrome.storage.local.get(
@@ -92,7 +103,7 @@ async function displayInvestmentData(weeklyData, monthlyData) {
         investmentDay
       );
       const investmentPercentage = calculateInvestmentPercentage(
-        consecutiveDownWeeks,
+        consecutiveDownWeeksMin,
         investmentFrequency,
         increaseRate,
         monthlyIncreaseRate
