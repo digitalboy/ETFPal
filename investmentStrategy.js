@@ -1,5 +1,5 @@
 const baseInvestmentAmount = 100; // 基础定投金额
-let defaultIncreaseRate = 10; // 默认周增幅比例
+let defaultWeeklyIncreaseRate = 10; // 默认周增幅比例
 let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例
 
 /**
@@ -52,7 +52,7 @@ function calculateConsecutiveDownWeeks(
 function calculateInvestmentPercentage(
   consecutiveDownPeriods,
   investmentFrequency,
-  increaseRate = defaultIncreaseRate,
+  increaseRate = defaultWeeklyIncreaseRate,
   monthlyIncreaseRate = defaultMonthlyIncreaseRate
 ) {
   let currentIncreaseRate = increaseRate;
@@ -97,6 +97,7 @@ function calculateNextInvestmentDate(
     if (isNaN(nextDate)) {
       nextDate = new Date(lastDateStr.replace(/-/g, "/"));
     }
+
     switch (investmentFrequency) {
       case "weekly":
         nextDate.setDate(nextDate.getDate() + 7);
@@ -145,8 +146,8 @@ function calculateNextInvestmentDate(
 
 /**
  * 计算连续上涨的月数
- * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每周/月数据
- * @param {Array<Array<[string, Object]>>} sp500Entries - 标普500 ETF 的每周/月数据
+ * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每月数据
+ * @param {Array<Array<[string, Object]>>} sp500Entries - 标普500 ETF 的每月数据
  * @returns {number} 连续上涨的月数
  */
 function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
@@ -166,6 +167,8 @@ function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
   let consecutiveUpMonths = 0;
   let nasdaqUp = true;
   let sp500Up = true;
+  let lastMonthNasdaq = null;
+  let lastMonthSP500 = null;
 
   for (
     let i = 0;
@@ -177,15 +180,28 @@ function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
     const currentMonthSP500 = getMonth(sp500Entries[i][0]);
     const previousMonthSP500 = getMonth(sp500Entries[i + 1][0]);
 
+    if (i === 0) {
+      nasdaqUp = getChange(nasdaqEntries[i], nasdaqEntries[i + 1]) > 0;
+      sp500Up = getChange(sp500Entries[i], sp500Entries[i + 1]) > 0;
+      if (nasdaqUp && sp500Up) {
+        consecutiveUpMonths++;
+      }
+      lastMonthNasdaq = currentMonthNasdaq;
+      lastMonthSP500 = currentMonthSP500;
+      continue;
+    }
+
     if (
-      currentMonthNasdaq !== previousMonthNasdaq ||
-      currentMonthSP500 !== previousMonthSP500
+      currentMonthNasdaq !== lastMonthNasdaq ||
+      currentMonthSP500 !== lastMonthSP500
     ) {
       if (nasdaqUp && sp500Up) {
         consecutiveUpMonths++;
       } else {
         break;
       }
+      lastMonthNasdaq = currentMonthNasdaq;
+      lastMonthSP500 = currentMonthSP500;
       nasdaqUp = getChange(nasdaqEntries[i], nasdaqEntries[i + 1]) > 0;
       sp500Up = getChange(sp500Entries[i], sp500Entries[i + 1]) > 0;
     } else {
@@ -195,7 +211,16 @@ function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
   }
 
   if (nasdaqUp && sp500Up) {
-    consecutiveUpMonths++;
+    if (nasdaqEntries.length > 1 && sp500Entries.length > 1) {
+      const currentMonthNasdaq = getMonth(nasdaqEntries[0][0]);
+      const currentMonthSP500 = getMonth(sp500Entries[0][0]);
+      if (
+        currentMonthNasdaq !== getMonth(nasdaqEntries[1][0]) ||
+        currentMonthSP500 !== getMonth(sp500Entries[1][0])
+      ) {
+        consecutiveUpMonths++;
+      }
+    }
   }
 
   return consecutiveUpMonths;
@@ -206,6 +231,6 @@ export {
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,
-  defaultIncreaseRate,
+  defaultWeeklyIncreaseRate,
   calculateConsecutiveUpMonths,
 };

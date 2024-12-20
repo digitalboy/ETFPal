@@ -3,12 +3,15 @@ import {
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,
-  defaultIncreaseRate,
+  defaultWeeklyIncreaseRate,
   calculateConsecutiveUpMonths,
 } from "./investmentStrategy.js";
 
 const nasdaqSymbol = "QQQ_weekly";
 const sp500Symbol = "SPY_weekly";
+const nasdaqMonthlySymbol = "QQQ_monthly";
+const sp500MonthlySymbol = "SPY_monthly";
+
 const investmentFrequency = "weekly"; // 默认每周
 
 let investmentDay;
@@ -79,10 +82,13 @@ function validateAPIResponse(response) {
     return false;
   }
   if (
-    !response["Weekly Time Series"] ||
-    typeof response["Weekly Time Series"] !== "object"
+    (!response["Weekly Time Series"] && !response["Monthly Time Series"]) ||
+    (response["Weekly Time Series"] &&
+      typeof response["Weekly Time Series"] !== "object") ||
+    (response["Monthly Time Series"] &&
+      typeof response["Monthly Time Series"] !== "object")
   ) {
-    logStatus("API返回数据无效，缺少 Weekly Time Series。", "error");
+    logStatus("API返回数据无效，缺少 Time Series。", "error");
     return false;
   }
   return true;
@@ -121,11 +127,46 @@ function fetchWeeklyETFData() {
   });
 }
 
+function fetchMonthlyETFData() {
+  const nasdaqURL = `https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=${nasdaqMonthlySymbol}`;
+  const sp500URL = `https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=${sp500MonthlySymbol}`;
+
+  return Promise.all([
+    fetch(nasdaqURL).then((response) => response.json()),
+    fetch(sp500URL).then((response) => response.json()),
+  ]).then((data) => {
+    if (!validateAPIResponse(data[0]) || !validateAPIResponse(data[1])) {
+      throw new Error("API 返回数据无效");
+    }
+
+    const nasdaqData = data[0]["Monthly Time Series"];
+    const sp500Data = data[1]["Monthly Time Series"];
+    const nasdaqRefreshed = data[0]["Meta Data"]["3. Last Refreshed"];
+    const sp500Refreshed = data[1]["Meta Data"]["3. Last Refreshed"];
+
+    const sortedNasdaqData = Object.entries(nasdaqData).sort(
+      (a, b) => new Date(b[0]) - new Date(a[0])
+    );
+    const sortedSP500Data = Object.entries(sp500Data).sort(
+      (a, b) => new Date(b[0]) - new Date(a[0])
+    );
+
+    return {
+      nasdaq: Object.fromEntries(sortedNasdaqData),
+      sp500: Object.fromEntries(sortedSP500Data),
+      nasdaqRefreshed,
+      sp500Refreshed,
+    };
+  });
+}
+
 function displayETFTrends() {
   logStatus("正在加载ETF趋势数据...", "info");
-  fetchWeeklyETFData()
-    .then((data) => {
-      updateETFTrendsUI(data);
+  Promise.all([fetchWeeklyETFData(), fetchMonthlyETFData()])
+    .then((results) => {
+      const weeklyData = results[0];
+      const monthlyData = results[1];
+      updateETFTrendsUI(weeklyData, monthlyData);
       logStatus("成功加载ETF趋势数据。", "success");
     })
     .catch((error) => {
@@ -136,56 +177,68 @@ function displayETFTrends() {
       logStatus(`加载ETF趋势数据失败: ${error.message}`, "error");
     });
 }
-function updateETFTrendsUI(data) {
-    const nasdaqEntries = Object.entries(data.nasdaq);
-    const sp500Entries = Object.entries(data.sp500);
-    const nasdaqRefreshed = data.nasdaqRefreshed;
-    const sp500Refreshed = data.sp500Refreshed;
+function updateETFTrendsUI(weeklyData, monthlyData) {
+  const nasdaqEntries = Object.entries(weeklyData.nasdaq);
+  const sp500Entries = Object.entries(weeklyData.sp500);
+  const nasdaqRefreshed = weeklyData.nasdaqRefreshed;
+  const sp500Refreshed = weeklyData.sp500Refreshed;
 
-  const updateCards = (entries, containerId, lastRefreshed, isMonthly = false) => {
+  const monthlyNasdaqEntries = Object.entries(monthlyData.nasdaq);
+  const monthlySP500Entries = Object.entries(monthlyData.sp500);
+  const monthlyNasdaqRefreshed = monthlyData.nasdaqRefreshed;
+  const monthlySP500Refreshed = monthlyData.sp500Refreshed;
+
+  const updateCards = (
+    entries,
+    containerId,
+    lastRefreshed,
+    isMonthly = false
+  ) => {
     const cards = document.querySelectorAll(`#${containerId} .trend-card`);
     if (entries.length < 3) {
       cards.forEach((card) => (card.textContent = "数据不足"));
       return;
     }
 
-        const lastRefreshedDate = new Date(lastRefreshed);
-        const getLabel = (date, lastRefreshedDate, index) => {
-          const entryDate = new Date(date);
-            const diffInDays = Math.round(
-            (lastRefreshedDate - entryDate) / (1000 * 60 * 60 * 24)
-          );
-        if (isMonthly) {
-           const diffInMonths = (lastRefreshedDate.getFullYear() - entryDate.getFullYear()) * 12 + (lastRefreshedDate.getMonth() - entryDate.getMonth());
+    const lastRefreshedDate = new Date(lastRefreshed);
+    const getLabel = (date, lastRefreshedDate, index) => {
+      const entryDate = new Date(date);
+      const diffInDays = Math.round(
+        (lastRefreshedDate - entryDate) / (1000 * 60 * 60 * 24)
+      );
+      if (isMonthly) {
+        const diffInMonths =
+          (lastRefreshedDate.getFullYear() - entryDate.getFullYear()) * 12 +
+          (lastRefreshedDate.getMonth() - entryDate.getMonth());
 
-          if (index === 0) {
-            return "本月";
-          } else if (diffInMonths === 1 && index === 1) {
-            return "上月";
-          } else if (diffInMonths === 2 && index === 2) {
-            return "上上月";
-          } else if (diffInMonths < 2 && index === 1) {
-              return "上月";
-          } else if (diffInMonths < 3 && index === 2) {
-               return "上上月"
-          }else {
-              return '更早'
-          }
+        if (index === 0) {
+          return "本月";
+        } else if (diffInMonths === 1 && index === 1) {
+          return "上月";
+        } else if (diffInMonths === 2 && index === 2) {
+          return "上上月";
+        } else if (diffInMonths < 2 && index === 1) {
+          return "上月";
+        } else if (diffInMonths < 3 && index === 2) {
+          return "上上月";
         } else {
-              if (index === 0) {
-                  return "本周";
-              } else if (diffInDays < 7 && index === 1) {
-                return "上周";
-              } else if (diffInDays < 14 && index === 2) {
-                return "上上周";
-              } else if (diffInDays < 14 && index === 1) {
-                  return "上周";
-              } else if (diffInDays < 21 && index === 2) {
-                  return "上上周";
-              } else {
-                  return "更早";
-              }
-          }
+          return "更早";
+        }
+      } else {
+        if (index === 0) {
+          return "本周";
+        } else if (diffInDays < 7 && index === 1) {
+          return "上周";
+        } else if (diffInDays < 14 && index === 2) {
+          return "上上周";
+        } else if (diffInDays < 14 && index === 1) {
+          return "上周";
+        } else if (diffInDays < 21 && index === 2) {
+          return "上上周";
+        } else {
+          return "更早";
+        }
+      }
     };
     cards.forEach((card, index) => {
       if (entries[index]) {
@@ -194,22 +247,22 @@ function updateETFTrendsUI(data) {
 
         let priceChange = 0;
         let percentageChange = 0;
-          if (index < entries.length - 1 && entries[index + 1]) {
-            const previousPrice = parseFloat(entries[index + 1][1]["4. close"]);
-            priceChange = currentPrice - previousPrice;
-              percentageChange = ((priceChange / previousPrice) * 100).toFixed(2);
+        if (index < entries.length - 1 && entries[index + 1]) {
+          const previousPrice = parseFloat(entries[index + 1][1]["4. close"]);
+          priceChange = currentPrice - previousPrice;
+          percentageChange = ((priceChange / previousPrice) * 100).toFixed(2);
         }
 
-        const label = getLabel(
-          entries[index][0],
-          lastRefreshedDate,
-          index
-        );
-          const arrow = priceChange > 0 ? '<span class="arrow up">▲</span>' : priceChange < 0 ? '<span class="arrow down">▼</span>' : '';
-          card.innerHTML = `${label} (${currentDate}):<br>${formatPrice(
-              currentPrice
-          )} ${arrow} ${Math.abs(percentageChange)}%`;
-
+        const label = getLabel(entries[index][0], lastRefreshedDate, index);
+        const arrow =
+          priceChange > 0
+            ? '<span class="arrow up">▲</span>'
+            : priceChange < 0
+            ? '<span class="arrow down">▼</span>'
+            : "";
+        card.innerHTML = `${label} (${currentDate}):<br>${formatPrice(
+          currentPrice
+        )} ${arrow} ${Math.abs(percentageChange)}%`;
 
         // 根据价格变化添加类名
         card.classList.remove("positive", "negative");
@@ -225,14 +278,21 @@ function updateETFTrendsUI(data) {
     });
   };
 
-    updateCards(nasdaqEntries, "nasdaqTrends", nasdaqRefreshed);
-    updateCards(sp500Entries, "sp500Trends", sp500Refreshed);
+  updateCards(nasdaqEntries, "nasdaqTrends", nasdaqRefreshed);
+  updateCards(sp500Entries, "sp500Trends", sp500Refreshed);
 
-    const monthlyNasdaqEntries = Object.entries(data.nasdaq).filter((entry, index) => index === 0 || new Date(entry[0]).getDate() <=7 );
-    const monthlySP500Entries =  Object.entries(data.sp500).filter((entry, index) => index === 0 || new Date(entry[0]).getDate() <=7 );
-
-    updateCards(monthlyNasdaqEntries, "nasdaqMonthlyTrends", nasdaqRefreshed, true);
-    updateCards(monthlySP500Entries, "sp500MonthlyTrends", sp500Refreshed,true);
+  updateCards(
+    monthlyNasdaqEntries,
+    "nasdaqMonthlyTrends",
+    monthlyNasdaqRefreshed,
+    true
+  );
+  updateCards(
+    monthlySP500Entries,
+    "sp500MonthlyTrends",
+    monthlySP500Refreshed,
+    true
+  );
 
   const consecutiveDownWeeks = calculateConsecutiveDownWeeks(
     nasdaqEntries,
@@ -243,10 +303,11 @@ function updateETFTrendsUI(data) {
     consecutiveDownWeeks;
 
   const consecutiveUpMonths = calculateConsecutiveUpMonths(
-      nasdaqEntries,
-      sp500Entries
+    monthlyNasdaqEntries,
+    monthlySP500Entries
   );
-  document.getElementById("consecutiveUpMonths").innerText = consecutiveUpMonths;
+  document.getElementById("consecutiveUpMonths").innerText =
+    consecutiveUpMonths;
 }
 function formatPrice(price) {
   return `$${parseFloat(price).toFixed(2)}`;
@@ -293,9 +354,9 @@ function loadIncreaseRate() {
   chrome.storage.local.get(
     ["increaseRate", "monthlyIncreaseRate"],
     function (result) {
-      const increaseRate = result.increaseRate || defaultIncreaseRate;
+      const increaseRate = result.increaseRate || defaultWeeklyIncreaseRate;
       const monthlyIncreaseRate =
-        result.monthlyIncreaseRate || defaultIncreaseRate;
+        result.monthlyIncreaseRate || defaultWeeklyIncreaseRate;
       document.getElementById("increaseRate").value = increaseRate;
       document.getElementById("monthlyIncreaseRate").value =
         monthlyIncreaseRate;
@@ -317,9 +378,9 @@ function displayInvestmentInfo() {
     ["investments", "increaseRate", "monthlyIncreaseRate", "investmentDay"],
     function (result) {
       const investments = result.investments || [];
-      const increaseRate = result.increaseRate || defaultIncreaseRate;
+      const increaseRate = result.increaseRate || defaultWeeklyIncreaseRate;
       const monthlyIncreaseRate =
-        result.monthlyIncreaseRate || defaultIncreaseRate;
+        result.monthlyIncreaseRate || defaultWeeklyIncreaseRate;
       investmentDay = result.investmentDay || 2;
       const lastInvestment = investments[investments.length - 1];
       const today = getLocalDate();
@@ -364,9 +425,9 @@ function executeInvestment() {
   chrome.storage.local.get(
     ["increaseRate", "monthlyIncreaseRate", "investmentDay"],
     function (result) {
-      const increaseRate = result.increaseRate || defaultIncreaseRate;
+      const increaseRate = result.increaseRate || defaultWeeklyIncreaseRate;
       const monthlyIncreaseRate =
-        result.monthlyIncreaseRate || defaultIncreaseRate;
+        result.monthlyIncreaseRate || defaultWeeklyIncreaseRate;
       investmentDay = result.investmentDay || 2;
       const investmentPercentage = calculateInvestmentPercentage(
         consecutiveDownDays,
