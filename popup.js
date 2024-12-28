@@ -1,9 +1,6 @@
 // popup.js
 import { fetchETFData } from "./api.js";
-import {
-  calculateConsecutiveDownWeeks,
-  calculateConsecutiveUpMonths,
-} from "./data.js";
+import { calculateConsecutiveUpMonths } from "./data.js";
 import {
   calculateInvestmentPercentage,
   executeInvestment,
@@ -17,7 +14,7 @@ import {
   toggleSettings,
   investmentDay,
 } from "./settings.js";
-import { getLocalDate } from "./utils.js";
+import { getLocalDate, calculateConsecutiveDownWeeks } from "./utils.js";
 
 const investmentFrequency = "weekly"; // 默认每周
 const increaseRateElementId = "increaseRate";
@@ -73,25 +70,25 @@ async function displayAllInfo() {
 
 // 显示投资数据
 async function displayInvestmentData(weeklyData, monthlyData) {
-  const consecutiveDownWeeks = calculateConsecutiveDownWeeks(
-    weeklyData.nasdaq,
-    weeklyData.sp500,
+  const consecutiveDownWeeksQQQ = calculateConsecutiveDownWeeks(
+    Object.entries(weeklyData.nasdaq),
+    [], // 传入空数组，只计算QQQ
     investmentFrequency
   );
+  const consecutiveDownWeeksSPY = calculateConsecutiveDownWeeks(
+    [],
+    Object.entries(weeklyData.sp500), // 传入空数组，只计算SPY
+    investmentFrequency
+  );
+
   document.getElementById("consecutiveDownDaysQQQ").innerText =
-    consecutiveDownWeeks.nasdaq;
+    consecutiveDownWeeksQQQ;
   document.getElementById("consecutiveDownDaysSPY").innerText =
-    consecutiveDownWeeks.sp500;
+    consecutiveDownWeeksSPY;
 
   const consecutiveUpMonths = calculateConsecutiveUpMonths(
     monthlyData.nasdaq,
     monthlyData.sp500
-  );
-
-  // 使用较小值来计算投资比例
-  const consecutiveDownWeeksMin = Math.min(
-    consecutiveDownWeeks.nasdaq,
-    consecutiveDownWeeks.sp500
   );
 
   document.getElementById("consecutiveUpMonths").innerText =
@@ -110,13 +107,25 @@ async function displayInvestmentData(weeklyData, monthlyData) {
         investmentFrequency,
         result.investmentDay || investmentDay
       );
-      const investmentPercentage = calculateInvestmentPercentage(
-        consecutiveDownWeeksMin,
+
+      const investmentPercentageQQQ = calculateInvestmentPercentage(
+        consecutiveDownWeeksQQQ,
         investmentFrequency,
         increaseRate,
         monthlyIncreaseRate
       );
-      displayInvestmentInfo(nextDate, investmentPercentage);
+
+      const investmentPercentageSPY = calculateInvestmentPercentage(
+        consecutiveDownWeeksSPY,
+        investmentFrequency,
+        increaseRate,
+        monthlyIncreaseRate
+      );
+      displayInvestmentInfo(
+        nextDate,
+        investmentPercentageQQQ,
+        investmentPercentageSPY
+      );
     }
   );
 }

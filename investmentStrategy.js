@@ -1,48 +1,8 @@
 // file: investmentStrategy.js
-import { getUTCDate } from "./utils.js";
+import { getUTCDate, calculateConsecutiveDownWeeks } from "./utils.js";
 const baseInvestmentAmount = 100; // 基础定投金额
 let defaultWeeklyIncreaseRate = 10; // 默认周增幅比例
 let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例
-
-/**
- * 计算连续下跌周期数（周/月）
- * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每周/月数据
- * @param {Array<Array<[string, Object]>>} sp500Entries - 标普500 ETF 的每周/月数据
- * @param {string} frequency - 定投周期，可选值 'weekly', 'monthly'
- * @returns {number} 最小连续下跌周期数
- */
-function calculateConsecutiveDownWeeks(
-  nasdaqEntries,
-  sp500Entries,
-  frequency = "weekly"
-) {
-  let nasdaqDownPeriods = 0;
-  let sp500DownPeriods = 0;
-
-  // 计算纳斯达克连续下跌周期数
-  for (let i = 1; i < nasdaqEntries.length; i++) {
-    const prevClose = parseFloat(nasdaqEntries[i - 1][1]["4. close"]);
-    const currClose = parseFloat(nasdaqEntries[i][1]["4. close"]);
-    if (currClose < prevClose) {
-      nasdaqDownPeriods++;
-    } else {
-      break;
-    }
-  }
-  // 计算标普500连续下跌周期数
-  for (let i = 1; i < sp500Entries.length; i++) {
-    const prevClose = parseFloat(sp500Entries[i - 1][1]["4. close"]);
-    const currClose = parseFloat(sp500Entries[i][1]["4. close"]);
-    if (currClose < prevClose) {
-      sp500DownPeriods++;
-    } else {
-      break;
-    }
-  }
-
-  // 返回纳斯达克和标普500中连续下跌周期数的最小值
-  return Math.min(nasdaqDownPeriods, sp500DownPeriods);
-}
 
 /**
  * 根据连续下跌周期数计算投资百分比
@@ -216,7 +176,6 @@ function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
 }
 
 export {
-  calculateConsecutiveDownWeeks,
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
   calculateNextInvestmentDate,

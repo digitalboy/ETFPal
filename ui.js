@@ -158,9 +158,15 @@ function formatPrice(price) {
   return `$${parseFloat(price).toFixed(2)}`;
 }
 
-function displayInvestmentInfo(nextInvestmentDate, investmentPercentage) {
+function displayInvestmentInfo(
+  nextInvestmentDate,
+  investmentPercentageQQQ,
+  investmentPercentageSPY
+) {
   document.getElementById("nextInvestmentDate").innerText = nextInvestmentDate;
-  document.getElementById("currentInvestmentPercentage").innerText =
-    investmentPercentage + "%";
+  document.getElementById("currentInvestmentPercentageQQQ").innerText =
+    investmentPercentageQQQ + "%";
+  document.getElementById("currentInvestmentPercentageSPY").innerText =
+    investmentPercentageSPY + "%";
 }
 export { logStatus, displayETFTrends, formatPrice, displayInvestmentInfo };

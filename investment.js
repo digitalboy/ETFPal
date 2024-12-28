@@ -1,29 +1,9 @@
 // investment.js
 import { getLocalDate } from "./utils.js";
 import { fetchETFData } from "./api.js";
-import { calculateNextInvestmentDate } from "./investmentStrategy.js";
+import { calculateInvestmentPercentage } from "./investmentStrategy.js";
 
 const defaultWeeklyIncreaseRate = 10;
-
-function calculateInvestmentPercentage(
-  consecutiveDownWeeks,
-  investmentFrequency,
-  increaseRate,
-  monthlyIncreaseRate
-) {
-  if (investmentFrequency === "weekly") {
-    return (
-      100 + consecutiveDownWeeks * (increaseRate || defaultWeeklyIncreaseRate)
-    );
-  } else if (investmentFrequency === "monthly") {
-    return (
-      100 +
-      consecutiveDownWeeks * (monthlyIncreaseRate || defaultWeeklyIncreaseRate)
-    );
-  } else {
-    return 100;
-  }
-}
 
 function calculateInvestmentAmount(investmentPercentage) {
   return investmentPercentage; // For now, the amount is the percentage.
