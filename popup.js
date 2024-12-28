@@ -62,14 +62,33 @@ async function displayAllInfo() {
     ]);
 
     displayETFTrends(weeklyData, monthlyData);
-    await displayInvestmentData(weeklyData, monthlyData);
+
+    // 在 displayAllInfo 中获取最新的增幅比例
+    chrome.storage.local.get(
+      ["increaseRate", "monthlyIncreaseRate", "investmentDay"],
+      async function (result) {
+        const increaseRate = result.increaseRate || 10;
+        const monthlyIncreaseRate = result.monthlyIncreaseRate || 10;
+        await displayInvestmentData(
+          weeklyData,
+          monthlyData,
+          increaseRate,
+          monthlyIncreaseRate
+        ); // 传递增幅比例
+      }
+    );
   } catch (error) {
     logStatus(`加载数据失败: ${error.message}`, "error");
   }
 }
 
 // 显示投资数据
-async function displayInvestmentData(weeklyData, monthlyData) {
+async function displayInvestmentData(
+  weeklyData,
+  monthlyData,
+  increaseRate,
+  monthlyIncreaseRate
+) {
   const consecutiveDownWeeksQQQ = calculateConsecutiveDownWeeks(
     Object.entries(weeklyData.nasdaq),
     [], // 传入空数组，只计算QQQ
@@ -101,40 +120,40 @@ async function displayInvestmentData(weeklyData, monthlyData) {
   document.getElementById("consecutiveDownMonthsSPY").innerText =
     consecutiveDownMonthsSPY;
 
-  chrome.storage.local.get(
-    ["increaseRate", "monthlyIncreaseRate", "investmentDay"],
-    async function (result) {
-      const increaseRate = result.increaseRate || 10;
-      const monthlyIncreaseRate = result.monthlyIncreaseRate || 10;
-      const today = getLocalDate();
+  chrome.storage.local.get(["investmentDay"], async function (result) {
+    const today = getLocalDate();
 
-      const nextDate = calculateNextInvestmentDate(
-        null,
-        today,
-        investmentFrequency,
-        result.investmentDay || investmentDay
-      );
+    const nextDate = calculateNextInvestmentDate(
+      null,
+      today,
+      investmentFrequency,
+      result.investmentDay || investmentDay
+    );
 
-      const investmentPercentageQQQ = calculateInvestmentPercentage(
-        consecutiveDownWeeksQQQ,
-        consecutiveDownMonthsQQQ,
-        increaseRate,
-        monthlyIncreaseRate
-      );
+    const investmentPercentageQQQ = calculateInvestmentPercentage(
+      consecutiveDownWeeksQQQ,
+      consecutiveDownMonthsQQQ,
+      increaseRate,
+      monthlyIncreaseRate
+    );
 
-      const investmentPercentageSPY = calculateInvestmentPercentage(
-        consecutiveDownWeeksSPY,
-        consecutiveDownMonthsSPY,
-        increaseRate,
-        monthlyIncreaseRate
-      );
-      displayInvestmentInfo(
-        nextDate,
-        investmentPercentageQQQ,
-        investmentPercentageSPY
-      );
-    }
-  );
+    const investmentPercentageSPY = calculateInvestmentPercentage(
+      consecutiveDownWeeksSPY,
+      consecutiveDownMonthsSPY,
+      increaseRate,
+      monthlyIncreaseRate
+    );
+    displayInvestmentInfo(
+      nextDate,
+      investmentPercentageQQQ,
+      investmentPercentageSPY
+    );
+    // 在 displayInvestmentData 中更新 UI
+    document.getElementById("currentWeeklyIncreaseRate").innerText =
+      increaseRate + "%";
+    document.getElementById("currentMonthlyIncreaseRate").innerText =
+      monthlyIncreaseRate + "%";
+  });
 }
 
 async function executeInvestmentHandler() {

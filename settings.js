@@ -13,10 +13,6 @@ function loadIncreaseRate(increaseRateElementId, monthlyIncreaseRateElementId) {
         document.getElementById(increaseRateElementId).value = increaseRate;
         document.getElementById(monthlyIncreaseRateElementId).value =
           monthlyIncreaseRate;
-        document.getElementById("currentWeeklyIncreaseRate").innerText =
-          increaseRate + "%";
-        document.getElementById("currentMonthlyIncreaseRate").innerText =
-          monthlyIncreaseRate + "%";
         resolve({ increaseRate, monthlyIncreaseRate });
       }
     );
