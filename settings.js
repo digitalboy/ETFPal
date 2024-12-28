@@ -52,11 +52,11 @@ function saveSettings(
       function () {
         const status = document.getElementById("settingsStatus");
         status.textContent = "设置已保存。";
-        // 发送消息通知 popup 页面更新
-        chrome.runtime.sendMessage({ action: "settingsUpdated" });
         setTimeout(function () {
           status.textContent = "";
         }, 750);
+        // 发送消息到 popup.js 以更新 UI
+        chrome.runtime.sendMessage({ action: "settingsChanged" });
         resolve();
       }
     );

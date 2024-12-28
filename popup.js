@@ -41,14 +41,13 @@ async function initialize() {
     document
       .getElementById("saveSettings")
       .addEventListener("click", saveSettingsHandler);
-
     // 监听来自 settings.js 的消息
     chrome.runtime.onMessage.addListener(function (
       request,
       sender,
       sendResponse
     ) {
-      if (request.action === "settingsUpdated") {
+      if (request.action === "settingsChanged") {
         displayAllInfo();
       }
     });
@@ -100,7 +99,7 @@ async function displayInvestmentData(weeklyData, monthlyData) {
 
   chrome.storage.local.get(
     ["increaseRate", "monthlyIncreaseRate", "investmentDay"],
-    function (result) {
+    async function (result) {
       const increaseRate = result.increaseRate || 10;
       const monthlyIncreaseRate = result.monthlyIncreaseRate || 10;
       const today = getLocalDate();
@@ -109,7 +108,7 @@ async function displayInvestmentData(weeklyData, monthlyData) {
         null,
         today,
         investmentFrequency,
-        investmentDay
+        result.investmentDay || investmentDay
       );
       const investmentPercentage = calculateInvestmentPercentage(
         consecutiveDownWeeksMin,
