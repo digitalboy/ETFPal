@@ -14,11 +14,11 @@ function validateAPIResponse(response) {
     return false;
   }
   if (
-    (!response["Weekly Time Series"] && !response["Monthly Time Series"]) ||
-    (response["Weekly Time Series"] &&
-      typeof response["Weekly Time Series"] !== "object") ||
-    (response["Monthly Time Series"] &&
-      typeof response["Monthly Time Series"] !== "object")
+    (!response["weekly Time Series"] && !response["monthly Time Series"]) ||
+    (response["weekly Time Series"] &&
+      typeof response["weekly Time Series"] !== "object") ||
+    (response["monthly Time Series"] &&
+      typeof response["monthly Time Series"] !== "object")
   ) {
     logStatus("API返回数据无效，缺少 Time Series。", "error");
     return false;
@@ -53,12 +53,12 @@ async function fetchETFData(frequency) {
 
     const nasdaqData =
       frequency === "weekly"
-        ? nasdaqResponse["Weekly Time Series"]
-        : nasdaqResponse["Monthly Time Series"];
+        ? nasdaqResponse["weekly Time Series"]
+        : nasdaqResponse["monthly Time Series"];
     const sp500Data =
       frequency === "weekly"
-        ? sp500Response["Weekly Time Series"]
-        : sp500Response["Monthly Time Series"];
+        ? sp500Response["weekly Time Series"]
+        : sp500Response["monthly Time Series"];
     const nasdaqRefreshed = nasdaqResponse["Meta Data"]["3. Last Refreshed"];
     const sp500Refreshed = sp500Response["Meta Data"]["3. Last Refreshed"];
 
