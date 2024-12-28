@@ -1,5 +1,7 @@
 // investment.js
 import { getLocalDate } from "./utils.js";
+import { fetchETFData } from "./api.js";
+import { calculateNextInvestmentDate } from "./investmentStrategy.js";
 
 const defaultWeeklyIncreaseRate = 10;
 
@@ -27,44 +29,15 @@ function calculateInvestmentAmount(investmentPercentage) {
   return investmentPercentage; // For now, the amount is the percentage.
 }
 
-function calculateNextInvestmentDate(
-  lastInvestmentDate,
-  today,
+async function executeInvestment(
+  investmentPercentage,
   investmentFrequency,
-  investmentDay
+  weeklyData
 ) {
-  let nextDate = new Date(today);
-  if (lastInvestmentDate) {
-    nextDate = new Date(lastInvestmentDate);
-  }
-
-  if (investmentFrequency === "weekly") {
-    nextDate.setDate(
-      nextDate.getDate() + ((7 + investmentDay - nextDate.getDay()) % 7)
-    );
-  } else if (investmentFrequency === "monthly") {
-    nextDate.setMonth(nextDate.getMonth() + 1);
-    nextDate.setDate(investmentDay);
-    // 如果计算出来的日期小于当前日期，则月份再加 1
-    if (nextDate < today) {
-      nextDate.setMonth(nextDate.getMonth() + 1);
-    }
-  }
-  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const options = {
-    timeZone: userTimeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  };
-  return nextDate.toLocaleString("en-US", options);
-}
-async function executeInvestment(investmentPercentage, investmentFrequency) {
   const investmentAmount = calculateInvestmentAmount(investmentPercentage);
   const today = getLocalDate();
 
   try {
-    const weeklyData = await fetchETFData("weekly");
     const nasdaqLatest = Object.entries(weeklyData.nasdaq)[0];
     const sp500Latest = Object.entries(weeklyData.sp500)[0];
     const prices = {
@@ -95,7 +68,6 @@ async function executeInvestment(investmentPercentage, investmentFrequency) {
 export {
   calculateInvestmentPercentage,
   calculateInvestmentAmount,
-  calculateNextInvestmentDate,
   defaultWeeklyIncreaseRate,
   executeInvestment,
 };

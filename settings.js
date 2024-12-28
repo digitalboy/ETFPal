@@ -52,6 +52,8 @@ function saveSettings(
       function () {
         const status = document.getElementById("settingsStatus");
         status.textContent = "设置已保存。";
+        // 发送消息通知 popup 页面更新
+        chrome.runtime.sendMessage({ action: "settingsUpdated" });
         setTimeout(function () {
           status.textContent = "";
         }, 750);

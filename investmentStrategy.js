@@ -1,4 +1,5 @@
 // file: investmentStrategy.js
+import { getUTCDate } from "./utils.js";
 const baseInvestmentAmount = 100; // 基础定投金额
 let defaultWeeklyIncreaseRate = 10; // 默认周增幅比例
 let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例
@@ -98,51 +99,38 @@ function calculateNextInvestmentDate(
     if (isNaN(nextDate)) {
       nextDate = new Date(lastDateStr.replace(/-/g, "/"));
     }
-
-    switch (investmentFrequency) {
-      case "weekly":
-        nextDate.setDate(nextDate.getDate() + 7);
-        break;
-      case "daily":
-        nextDate.setDate(nextDate.getDate() + 1);
-        break;
-      case "monthly":
-        nextDate.setMonth(nextDate.getMonth() + 1);
-        break;
-      default:
-        // 默认每周
-        nextDate.setDate(nextDate.getDate() + 7);
-    }
   }
+
+  nextDate = getUTCDate(nextDate);
 
   let daysUntilTargetDay = 0;
   let dayOfWeek; // 在switch语句之前声明
   switch (investmentFrequency) {
     case "weekly":
-      dayOfWeek = nextDate.getDay(); //赋值
+      dayOfWeek = nextDate.getUTCDay(); //赋值
       daysUntilTargetDay = (investmentDay - dayOfWeek + 7) % 7;
       break;
     case "monthly":
-      const dayOfMonth = nextDate.getDate();
+      const dayOfMonth = nextDate.getUTCDate();
       daysUntilTargetDay = investmentDay - dayOfMonth;
       if (daysUntilTargetDay < 0) {
-        nextDate.setMonth(nextDate.getMonth() + 1);
-        const dayOfMonth = nextDate.getDate();
+        nextDate.setUTCMonth(nextDate.getUTCMonth() + 1);
+        const dayOfMonth = nextDate.getUTCDate();
         daysUntilTargetDay = investmentDay - dayOfMonth;
       }
       break;
     case "daily":
       break;
     default:
-      dayOfWeek = nextDate.getDay(); //赋值
+      dayOfWeek = nextDate.getUTCDay(); //赋值
       daysUntilTargetDay = (investmentDay - dayOfWeek + 7) % 7;
   }
 
-  nextDate.setDate(nextDate.getDate() + daysUntilTargetDay);
+  nextDate.setUTCDate(nextDate.getUTCDate() + daysUntilTargetDay);
 
-  return `${nextDate.getFullYear()}-${(nextDate.getMonth() + 1)
+  return `${nextDate.getUTCFullYear()}-${(nextDate.getUTCMonth() + 1)
     .toString()
-    .padStart(2, "0")}-${nextDate.getDate().toString().padStart(2, "0")}`;
+    .padStart(2, "0")}-${nextDate.getUTCDate().toString().padStart(2, "0")}`;
 }
 
 /**

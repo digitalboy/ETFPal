@@ -158,18 +158,7 @@ function formatPrice(price) {
   return `$${parseFloat(price).toFixed(2)}`;
 }
 
-function displayInvestmentInfo(
-  lastInvestmentDate,
-  nextInvestmentDate,
-  investmentPercentage
-) {
-  if (lastInvestmentDate) {
-    document.getElementById("lastInvestmentDate").innerText =
-      lastInvestmentDate;
-  } else {
-    document.getElementById("lastInvestmentDate").innerText = "暂无记录";
-  }
-
+function displayInvestmentInfo(nextInvestmentDate, investmentPercentage) {
   document.getElementById("nextInvestmentDate").innerText = nextInvestmentDate;
   document.getElementById("currentInvestmentPercentage").innerText =
     investmentPercentage + "%";

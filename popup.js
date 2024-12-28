@@ -6,9 +6,9 @@ import {
 } from "./data.js";
 import {
   calculateInvestmentPercentage,
-  calculateNextInvestmentDate,
   executeInvestment,
 } from "./investment.js";
+import { calculateNextInvestmentDate } from "./investmentStrategy.js";
 import { logStatus, displayETFTrends, displayInvestmentInfo } from "./ui.js";
 import {
   loadIncreaseRate,
@@ -41,6 +41,17 @@ async function initialize() {
     document
       .getElementById("saveSettings")
       .addEventListener("click", saveSettingsHandler);
+
+    // 监听来自 settings.js 的消息
+    chrome.runtime.onMessage.addListener(function (
+      request,
+      sender,
+      sendResponse
+    ) {
+      if (request.action === "settingsUpdated") {
+        displayAllInfo();
+      }
+    });
   } catch (error) {
     logStatus(`初始化失败: ${error.message}`, "error");
   }
@@ -86,18 +97,16 @@ async function displayInvestmentData(weeklyData, monthlyData) {
 
   document.getElementById("consecutiveUpMonths").innerText =
     consecutiveUpMonths;
+
   chrome.storage.local.get(
-    ["investments", "increaseRate", "monthlyIncreaseRate"],
+    ["increaseRate", "monthlyIncreaseRate", "investmentDay"],
     function (result) {
-      const investments = result.investments || [];
       const increaseRate = result.increaseRate || 10;
       const monthlyIncreaseRate = result.monthlyIncreaseRate || 10;
-      const lastInvestment = investments[investments.length - 1];
       const today = getLocalDate();
-      const lastInvestmentDate = lastInvestment ? lastInvestment.date : null;
 
       const nextDate = calculateNextInvestmentDate(
-        lastInvestmentDate,
+        null,
         today,
         investmentFrequency,
         investmentDay
@@ -108,7 +117,7 @@ async function displayInvestmentData(weeklyData, monthlyData) {
         increaseRate,
         monthlyIncreaseRate
       );
-      displayInvestmentInfo(lastInvestmentDate, nextDate, investmentPercentage);
+      displayInvestmentInfo(nextDate, investmentPercentage);
     }
   );
 }
@@ -122,6 +131,7 @@ async function executeInvestmentHandler() {
     increaseRateElementId,
     monthlyIncreaseRateElementId
   );
+  const weeklyData = await fetchETFData("weekly");
 
   const investmentPercentage = calculateInvestmentPercentage(
     consecutiveDownDays,
@@ -130,7 +140,11 @@ async function executeInvestmentHandler() {
     monthlyIncreaseRate
   );
   try {
-    await executeInvestment(investmentPercentage, investmentFrequency);
+    await executeInvestment(
+      investmentPercentage,
+      investmentFrequency,
+      weeklyData
+    );
     displayAllInfo();
   } catch (error) {
     logStatus(`执行定投失败: ${error.message}`, "error");
