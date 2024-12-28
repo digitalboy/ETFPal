@@ -117,14 +117,14 @@ async function displayInvestmentData(weeklyData, monthlyData) {
 
       const investmentPercentageQQQ = calculateInvestmentPercentage(
         consecutiveDownWeeksQQQ,
-        investmentFrequency,
+        consecutiveDownMonthsQQQ,
         increaseRate,
         monthlyIncreaseRate
       );
 
       const investmentPercentageSPY = calculateInvestmentPercentage(
         consecutiveDownWeeksSPY,
-        investmentFrequency,
+        consecutiveDownMonthsSPY,
         increaseRate,
         monthlyIncreaseRate
       );

@@ -6,26 +6,22 @@ let defaultMonthlyIncreaseRate = 10; // 默认月增幅比例
 
 /**
  * 根据连续下跌周期数计算投资百分比
- * @param {number} consecutiveDownPeriods - 连续下跌周期数
- *  @param {string} investmentFrequency - 定投周期，可选值 'weekly', 'monthly'
+ * @param {number} consecutiveDownWeeks - 连续下跌周数
+ * @param {number} consecutiveDownMonths - 连续下跌月数
  * @param {number} increaseRate - 增幅
+ * @param {number} monthlyIncreaseRate - 月增幅
  * @returns {number} 投资百分比
  */
 function calculateInvestmentPercentage(
-  consecutiveDownPeriods,
-  investmentFrequency,
+  consecutiveDownWeeks,
+  consecutiveDownMonths,
   increaseRate = defaultWeeklyIncreaseRate,
   monthlyIncreaseRate = defaultMonthlyIncreaseRate
 ) {
-  let currentIncreaseRate = increaseRate;
-  if (investmentFrequency === "monthly") {
-    currentIncreaseRate = monthlyIncreaseRate;
-  }
+  let weeklyIncrease = consecutiveDownWeeks * increaseRate;
+  let monthlyIncrease = consecutiveDownMonths * monthlyIncreaseRate;
 
-  if (consecutiveDownPeriods <= 0) {
-    return 100;
-  }
-  return 100 + consecutiveDownPeriods * currentIncreaseRate;
+  return 100 + weeklyIncrease + monthlyIncrease;
 }
 
 /**
@@ -36,7 +32,6 @@ function calculateInvestmentPercentage(
 function calculateInvestmentAmount(investmentPercentage) {
   return (baseInvestmentAmount * investmentPercentage) / 100;
 }
-
 /**
  * 计算下个投资日期的函数，根据定投周期和上一次投资日期，计算下次投资日期
  * @param {Date|string} lastDateStr - 上次投资日期
@@ -92,7 +87,6 @@ function calculateNextInvestmentDate(
     .toString()
     .padStart(2, "0")}-${nextDate.getUTCDate().toString().padStart(2, "0")}`;
 }
-
 /**
  * 计算连续上涨的月数
  * @param {Array<Array<[string, Object]>>} nasdaqEntries - 纳斯达克 ETF 的每月数据
@@ -174,7 +168,6 @@ function calculateConsecutiveUpMonths(nasdaqEntries, sp500Entries) {
 
   return consecutiveUpMonths;
 }
-
 export {
   calculateInvestmentPercentage,
   calculateInvestmentAmount,

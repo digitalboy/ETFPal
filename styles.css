@@ -70,7 +70,7 @@ body {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  flex: 1; /* 使输入框占据剩余空间 */
+  flex: 1;
 }
 
 .save-button {
@@ -101,27 +101,28 @@ body {
   clear: both;
 }
 
-.info-row {
-  width: 50%;
-  float: left;
-  box-sizing: border-box;
-  padding-right: 10px; /* 列间距 */
-  margin-bottom: 8px;
+.basic-info {
   display: flex;
-  align-items: center; /* 垂直居中 label 和数值 */
+  justify-content: space-around;
+  margin-bottom: 10px;
 }
 
-.info-row:nth-child(2n) {
-  padding-right: 0; /* 移除偶数列的右内边距 */
-  padding-left: 10px; /* 增加偶数列的左内边距 */
+
+.info-row {
+  width: auto; /* 设置宽度为auto，使其适应内容 */
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
 }
+
 .info-row label {
   font-weight: bold;
   color: #555;
   display: inline-block;
   min-width: 80px;
-  margin-right: 5px; /* label 和数值之间的距离 */
-  text-align: left; /* 确保 label 文字左对齐 */
+  margin-right: 5px;
+  text-align: left;
 }
 
 .action-button {
@@ -184,11 +185,11 @@ body {
 }
 
 .trend-card.positive {
-  background-color: #e6f7e6; /* 淡绿色 */
+  background-color: #e6f7e6;
 }
 
 .trend-card.negative {
-  background-color: #ffe6e6; /* 淡红色 */
+  background-color: #ffe6e6;
 }
 
 .status-container {
@@ -255,4 +256,31 @@ h3 {
   margin-inline-end: 0px;
   font-weight: bold;
   unicode-bidi: isolate;
+}
+
+.etf-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.etf-info-column {
+    width: 48%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.etf-card-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center; /* 标题居中 */
+}
+
+
+.qqq-card {
+    background-color: #e0f7fa;
+     border-radius: 8px;
+}
+.spy-card{
+    background-color: #f0f4c3;
+    border-radius: 8px;
 }
