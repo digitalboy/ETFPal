@@ -1,6 +1,6 @@
 // popup.js
 import { fetchETFData } from "./api.js";
-import { calculateConsecutiveUpMonths } from "./data.js";
+import {} from "./data.js";
 import {
   calculateInvestmentPercentage,
   executeInvestment,
@@ -81,18 +81,25 @@ async function displayInvestmentData(weeklyData, monthlyData) {
     investmentFrequency
   );
 
+  const consecutiveDownMonthsQQQ = calculateConsecutiveDownWeeks(
+    Object.entries(monthlyData.nasdaq),
+    [],
+    "monthly"
+  );
+  const consecutiveDownMonthsSPY = calculateConsecutiveDownWeeks(
+    [],
+    Object.entries(monthlyData.sp500),
+    "monthly"
+  );
+
   document.getElementById("consecutiveDownDaysQQQ").innerText =
     consecutiveDownWeeksQQQ;
   document.getElementById("consecutiveDownDaysSPY").innerText =
     consecutiveDownWeeksSPY;
-
-  const consecutiveUpMonths = calculateConsecutiveUpMonths(
-    monthlyData.nasdaq,
-    monthlyData.sp500
-  );
-
-  document.getElementById("consecutiveUpMonths").innerText =
-    consecutiveUpMonths;
+  document.getElementById("consecutiveDownMonthsQQQ").innerText =
+    consecutiveDownMonthsQQQ;
+  document.getElementById("consecutiveDownMonthsSPY").innerText =
+    consecutiveDownMonthsSPY;
 
   chrome.storage.local.get(
     ["increaseRate", "monthlyIncreaseRate", "investmentDay"],
