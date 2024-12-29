@@ -1,5 +1,6 @@
 // popup.js
 import { fetchETFData } from "./api.js";
+import { detectAndSetLanguage, getMessage } from "./language.js";
 import {} from "./data.js";
 import {
   calculateInvestmentPercentage,
@@ -20,11 +21,21 @@ const investmentFrequency = "weekly"; // 默认每周
 const increaseRateElementId = "increaseRate";
 const monthlyIncreaseRateElementId = "monthlyIncreaseRate";
 const investmentDayElementId = "investmentDay";
+let currentLang;
 
-document.addEventListener("DOMContentLoaded", initialize);
+document.addEventListener("DOMContentLoaded", async () => {
+  // 检测并设置语言
+  currentLang = detectAndSetLanguage();
+  // 初始化其他功能
+  await initialize();
+});
 
 async function initialize() {
   try {
+    // 先加载语言设置
+    console.log("currentLang in initialize: ", currentLang);
+    //    const currentLang = await loadLanguage();  //remove this line
+    // 初始化其他功能
     await loadIncreaseRate(increaseRateElementId, monthlyIncreaseRateElementId);
     await loadInvestmentDay(investmentDayElementId);
     await displayAllInfo();
@@ -41,7 +52,7 @@ async function initialize() {
     document
       .getElementById("toggleAbout")
       .addEventListener("click", toggleAbout);
-        // 监听来自 settings.js 的消息
+    // 监听来自 settings.js 的消息
     chrome.runtime.onMessage.addListener(function (
       request,
       sender,
@@ -51,9 +62,19 @@ async function initialize() {
         displayAllInfo();
       }
     });
+    logStatus(getMessage("initializingApp"), "info");
   } catch (error) {
     logStatus(`初始化失败: ${error.message}`, "error");
   }
+}
+
+async function loadLanguage() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(["language"], function (result) {
+      const language = result.language || detectAndSetLanguage();
+      resolve(language);
+    });
+  });
 }
 
 async function displayAllInfo() {
@@ -174,7 +195,7 @@ async function executeInvestmentHandler() {
     consecutiveDownDays,
     investmentFrequency,
     increaseRate,
-     monthlyIncreaseRate
+    monthlyIncreaseRate
   );
   try {
     await executeInvestment(
@@ -208,20 +229,23 @@ function toggleAbout() {
       .then((html) => {
         aboutContainer.innerHTML = html;
         aboutContainer.classList.remove("hidden");
-         // 添加关闭按钮的事件监听
-        document.getElementById("closeAbout").addEventListener("click", closeAbout);
+        // 添加关闭按钮的事件监听
+        document
+          .getElementById("closeAbout")
+          .addEventListener("click", closeAbout);
       })
-       .catch((error) => {
+      .catch((error) => {
         console.error("Failed to load about.html:", error);
         logStatus("加载关于页面失败", "error");
       });
-  }else{
-      aboutContainer.classList.add("hidden");
-       aboutContainer.innerHTML = "";
+  } else {
+    aboutContainer.classList.add("hidden");
+    aboutContainer.innerHTML = "";
   }
 }
+
 function closeAbout() {
   const aboutContainer = document.getElementById("aboutContainer");
   aboutContainer.classList.add("hidden");
-    aboutContainer.innerHTML = "";
+  aboutContainer.innerHTML = "";
 }

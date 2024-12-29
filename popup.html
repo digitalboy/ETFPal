@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
   <head>
     <meta charset="UTF-8" />
-    <title>ETF 定投决策工具</title>
+    <title data-i18n="extName">ETF 定投决策工具</title>
     <link rel="stylesheet" href="styles.css" />
     <link
       rel="stylesheet"
@@ -15,9 +15,9 @@
   <body>
     <div class="container">
       <header class="header">
-        <h1>ETF 定投助手</h1>
+        <h1 data-i18n="extName">ETF 定投助手</h1>
         <div class="header-buttons">
-          <button id="toggleAbout" class="about-button">
+          <button id="toggleAbout" class="about-button" >
             <i class="fas fa-info-circle"></i>
           </button>
           <button id="toggleSettings" class="settings-button">
@@ -25,128 +25,133 @@
           </button>
         </div>
       </header>
+
       <div id="aboutContainer" class="hidden"></div>
       <div id="settingsContainer" class="settings-container hidden">
         <div class="setting-item">
-          <label for="increaseRate">周增幅比例 (%):</label>
+          <label for="increaseRate" data-i18n="increaseRateLabel">周增幅比例 (%):</label>
           <input type="number" id="increaseRate" value="10" />
         </div>
         <div class="setting-item">
-          <label for="monthlyIncreaseRate">月增幅比例 (%):</label>
+          <label for="monthlyIncreaseRate" data-i18n="monthlyIncreaseRateLabel">月增幅比例 (%):</label>
           <input type="number" id="monthlyIncreaseRate" value="10" />
         </div>
         <div class="setting-item">
-          <label for="investmentDay">每周定投日:</label>
+          <label for="investmentDay" data-i18n="investmentDayLabel">每周定投日:</label>
           <select id="investmentDay">
-            <option value="1">周一</option>
-            <option value="2">周二</option>
-            <option value="3">周三</option>
-            <option value="4">周四</option>
-            <option value="5">周五</option>
+            <option value="1" data-i18n="monday">周一</option>
+            <option value="2" data-i18n="tuesday">周二</option>
+            <option value="3" data-i18n="wednesday">周三</option>
+            <option value="4" data-i18n="thursday">周四</option>
+            <option value="5" data-i18n="friday">周五</option>
           </select>
         </div>
-        <button id="saveSettings" class="save-button">保存设置</button>
+        <button id="saveSettings" class="save-button" data-i18n="saveSettings">保存设置</button>
         <div id="settingsStatus"></div>
       </div>
 
       <div class="info-card">
         <div class="basic-info">
           <div class="info-row">
-            <label>下个定投日：</label>
-            <span id="nextInvestmentDate">加载中...</span>
+            <label data-i18n="nextInvestmentDate">下个定投日：</label>
+            <span id="nextInvestmentDate" data-i18n="loading">加载中...</span>
           </div>
-           <div class="info-row">
-            <label>当前周增幅：</label>
+          <div class="info-row">
+            <label data-i18n="currentWeeklyIncreaseRate">当前周增幅：</label>
             <span id="currentWeeklyIncreaseRate">--</span>
           </div>
-           <div class="info-row">
-            <label>当前月增幅：</label>
+          <div class="info-row">
+            <label data-i18n="currentMonthlyIncreaseRate">当前月增幅：</label>
             <span id="currentMonthlyIncreaseRate">--</span>
           </div>
         </div>
+        
         <div class="etf-info-container">
           <div class="etf-info-column qqq-card">
-            <div class="etf-card-title">纳斯达克100(QQQ)</div>
+            <div class="etf-card-title" data-i18n="nasdaqETFTitle">纳斯达克100(QQQ)</div>
             <div class="info-row">
-              <label>当前定投比例：</label>
+              <label data-i18n="currentInvestmentPercentageQQQ">当前定投比例：</label>
               <span id="currentInvestmentPercentageQQQ">--</span>
             </div>
             <div class="info-row">
-              <label>连续下跌周数：</label>
+              <label data-i18n="consecutiveDownWeeks">连续下跌周数：</label>
               <span id="consecutiveDownDaysQQQ">0</span>
             </div>
-             <div class="info-row">
-              <label>连续下跌月数：</label>
+            <div class="info-row">
+              <label data-i18n="consecutiveDownMonths">连续下跌月数：</label>
               <span id="consecutiveDownMonthsQQQ">0</span>
             </div>
           </div>
+          
           <div class="etf-info-column spy-card">
-            <div class="etf-card-title">标普500(SPY)</div>
+            <div class="etf-card-title" data-i18n="sp500ETFTitle">标普500(SPY)</div>
             <div class="info-row">
-              <label>当前定投比例：</label>
+              <label data-i18n="currentInvestmentPercentageSPY">当前定投比例：</label>
               <span id="currentInvestmentPercentageSPY">--</span>
             </div>
             <div class="info-row">
-              <label>连续下跌周数：</label>
+              <label data-i18n="consecutiveDownWeeks">连续下跌周数：</label>
               <span id="consecutiveDownDaysSPY">0</span>
             </div>
-             <div class="info-row">
-              <label>连续下跌月数：</label>
+            <div class="info-row">
+              <label data-i18n="consecutiveDownMonths">连续下跌月数：</label>
               <span id="consecutiveDownMonthsSPY">0</span>
             </div>
           </div>
         </div>
       </div>
-      <button id="executeInvestment" class="action-button hidden">
+
+      <button id="executeInvestment" class="action-button hidden" data-i18n="executeInvestment">
         如果定投完成请点击
       </button>
       <div id="statusMessage"></div>
 
-      <!-- 行情趋势部分 -->
       <div class="trends-card">
-        <div class="trends-card">
-          <h3>周行情趋势</h3>
+        <div class="trends-section">
+          <h3 data-i18n="weeklyTrends">周行情趋势</h3>
           <div class="trend-container">
             <div class="trend-item">
-              <label>纳斯达克100ETF(QQQ)趋势：</label>
+              <label data-i18n="nasdaqTrendsLabel">纳斯达克100ETF(QQQ)趋势：</label>
               <div class="trend-cards" id="nasdaqTrends">
-                <div class="trend-card">上上周 (加载中...)</div>
-                <div class="trend-card">上周 (加载中...)</div>
-                <div class="trend-card">本周 (加载中...)</div>
+                <div class="trend-card" data-i18n="twoWeeksAgo">上上周 (加载中...)</div>
+                <div class="trend-card" data-i18n="lastWeek">上周 (加载中...)</div>
+                <div class="trend-card" data-i18n="thisWeek">本周 (加载中...)</div>
               </div>
             </div>
             <div class="trend-item">
-              <label>标普500ETF(SPY)趋势：</label>
+              <label data-i18n="sp500TrendsLabel">标普500ETF(SPY)趋势：</label>
               <div class="trend-cards" id="sp500Trends">
-                <div class="trend-card">上上周 (加载中...)</div>
-                <div class="trend-card">上周 (加载中...)</div>
-                <div class="trend-card">本周 (加载中...)</div>
+                <div class="trend-card" data-i18n="twoWeeksAgo">上上周 (加载中...)</div>
+                <div class="trend-card" data-i18n="lastWeek">上周 (加载中...)</div>
+                <div class="trend-card" data-i18n="thisWeek">本周 (加载中...)</div>
               </div>
             </div>
           </div>
         </div>
-         <div class="trends-card">
-          <h3>月行情趋势</h3>
+
+        <div class="trends-section">
+          <h3 data-i18n="monthlyTrends">月行情趋势</h3>
           <div class="trend-container">
             <div class="trend-item">
-              <label>纳斯达克100ETF(QQQ)趋势：</label>
-               <div class="trend-cards" id="nasdaqMonthlyTrends">
-                  <div class="trend-card">上上月 (加载中...)</div>
-                  <div class="trend-card">上月 (加载中...)</div>
-                  <div class="trend-card">本月 (加载中...)</div>
+              <label data-i18n="nasdaqTrendsLabel">纳斯达克100ETF(QQQ)趋势：</label>
+              <div class="trend-cards" id="nasdaqMonthlyTrends">
+                <div class="trend-card" data-i18n="twoMonthsAgo">上上月 (加载中...)</div>
+                <div class="trend-card" data-i18n="lastMonth">上月 (加载中...)</div>
+                <div class="trend-card" data-i18n="thisMonth">本月 (加载中...)</div>
               </div>
             </div>
-             <div class="trend-item">
-              <label>标普500ETF(SPY)趋势：</label>
+            <div class="trend-item">
+              <label data-i18n="sp500TrendsLabel">标普500ETF(SPY)趋势：</label>
               <div class="trend-cards" id="sp500MonthlyTrends">
-                   <div class="trend-card">上上月 (加载中...)</div>
-                  <div class="trend-card">上月 (加载中...)</div>
-                   <div class="trend-card">本月 (加载中...)</div>
+                <div class="trend-card" data-i18n="twoMonthsAgo">上上月 (加载中...)</div>
+                <div class="trend-card" data-i18n="lastMonth">上月 (加载中...)</div>
+                <div class="trend-card" data-i18n="thisMonth">本月 (加载中...)</div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div class="status-container hidden">
         <textarea id="statusBox" readonly></textarea>
       </div>
