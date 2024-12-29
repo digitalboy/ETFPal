@@ -3,6 +3,7 @@
     "name": "ETF定投决策工具",
     "version": "1.2",
     "description": "一个简单的ETF定投决策工具，支持纳斯达克和标普500ETF。",
+    "default_locale": "en",
     "permissions": [
         "storage",
         "activeTab",
@@ -25,6 +26,4 @@
         "service_worker": "background.js",
         "type": "module"
     }
-
-    
 }

@@ -1,0 +1,154 @@
+{
+    "extName": {
+        "message": "ETF投資アシスタント",
+        "description": "The name of the extension"
+    },
+    "toggleAbout": {
+        "message": "概要",
+        "description": "Button to toggle about section"
+    },
+    "toggleSettings": {
+        "message": "設定",
+        "description": "Button to toggle settings section"
+    },
+    "nextInvestmentDate": {
+        "message": "次の投資日:",
+        "description": "Label for the next investment date"
+    },
+    "currentWeeklyIncreaseRate": {
+        "message": "現在の週次増加:",
+        "description": "Label for current weekly increase rate"
+    },
+    "currentMonthlyIncreaseRate": {
+        "message": "現在の月次増加:",
+        "description": "Label for current monthly increase rate"
+    },
+    "currentInvestmentPercentageQQQ": {
+        "message": "現在の投資比率:",
+        "description": "Label for the current investment ratio for QQQ"
+    },
+    "currentInvestmentPercentageSPY": {
+        "message": "現在の投資比率:",
+        "description": "Label for the current investment ratio for SPY"
+    },
+    "consecutiveDownWeeks": {
+        "message": "連続下落週数:",
+        "description": "Label for consecutive down weeks"
+    },
+    "consecutiveDownMonths": {
+        "message": "連続下落月数:",
+        "description": "Label for consecutive down months"
+    },
+    "executeInvestment": {
+        "message": "投資完了したらクリック",
+        "description": "Button to execute investment"
+    },
+    "weeklyTrends": {
+        "message": "週間市場トレンド",
+        "description": "Title for weekly market trends"
+    },
+    "monthlyTrends": {
+        "message": "月間市場トレンド",
+        "description": "Title for monthly market trends"
+    },
+    "nasdaqTrendsLabel": {
+        "message": "ナスダック100 ETF (QQQ) トレンド:",
+        "description": "Label for Nasdaq 100 ETF trends"
+    },
+    "sp500TrendsLabel": {
+        "message": "S&P 500 ETF (SPY) トレンド:",
+        "description": "Label for S&P 500 ETF trends"
+    },
+    "increaseRateLabel": {
+        "message": "週次増加率 (%):",
+        "description": "Label for weekly increase rate"
+    },
+    "monthlyIncreaseRateLabel": {
+        "message": "月次増加率 (%):",
+        "description": "Label for monthly increase rate"
+    },
+    "investmentDayLabel": {
+        "message": "毎週の投資日:",
+        "description": "Label for weekly investment day"
+    },
+    "monday": {
+        "message": "月曜日",
+        "description": "Option for Monday"
+    },
+    "tuesday": {
+        "message": "火曜日",
+        "description": "Option for Tuesday"
+    },
+    "wednesday": {
+        "message": "水曜日",
+        "description": "Option for Wednesday"
+    },
+    "thursday": {
+        "message": "木曜日",
+        "description": "Option for Thursday"
+    },
+    "friday": {
+        "message": "金曜日",
+        "description": "Option for Friday"
+    },
+    "saveSettings": {
+        "message": "設定を保存",
+        "description": "Button to save settings"
+    },
+    "settingsStatus": {
+        "message": "設定が保存されました。",
+        "description": "Status message for settings"
+    },
+    "loadingData": {
+        "message": "データをロード中...",
+        "description": "Status message when data is loading"
+    },
+    "errorLabel": {
+        "message": "エラー",
+        "description": "Error label for status"
+    },
+    "warningLabel": {
+        "message": "警告",
+        "description": "Warning label for status"
+    },
+    "successLabel": {
+        "message": "成功",
+        "description": "Success label for status"
+    },
+    "closeAbout": {
+        "message": "閉じる",
+        "description": "button to close about dialog"
+    },
+    "thisWeek": {
+        "message": "今週",
+        "description": "label for current week"
+    },
+    "lastWeek": {
+        "message": "先週",
+        "description": "label for last week"
+    },
+    "lastLastWeek": {
+        "message": "先々週",
+        "description": "label for last last week"
+    },
+    "thisMonth": {
+        "message": "今月",
+        "description": "label for current month"
+    },
+    "lastMonth": {
+        "message": "先月",
+        "description": "label for last month"
+    },
+    "lastLastMonth": {
+        "message": "先々月",
+        "description": "label for last last month"
+    },
+    "notEnoughData": {
+        "message": "データが不足しています",
+        "description": "label when data is not enough"
+    },
+    "moreEarly": {
+        "message": "もっと早い",
+        "description": "label when data is more early"
+    }
+}

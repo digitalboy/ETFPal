@@ -1,0 +1,154 @@
+{
+    "extName": {
+        "message": "ETF-Investitionsassistent",
+        "description": "The name of the extension"
+    },
+    "toggleAbout": {
+        "message": "Über",
+        "description": "Button to toggle about section"
+    },
+    "toggleSettings": {
+        "message": "Einstellungen",
+        "description": "Button to toggle settings section"
+    },
+    "nextInvestmentDate": {
+        "message": "Nächster Investitionstag:",
+        "description": "Label for the next investment date"
+    },
+    "currentWeeklyIncreaseRate": {
+        "message": "Aktuelle wöchentliche Steigerung:",
+        "description": "Label for current weekly increase rate"
+    },
+    "currentMonthlyIncreaseRate": {
+        "message": "Aktuelle monatliche Steigerung:",
+        "description": "Label for current monthly increase rate"
+    },
+    "currentInvestmentPercentageQQQ": {
+        "message": "Aktuelles Investitionsverhältnis:",
+        "description": "Label for the current investment ratio for QQQ"
+    },
+    "currentInvestmentPercentageSPY": {
+        "message": "Aktuelles Investitionsverhältnis:",
+        "description": "Label for the current investment ratio for SPY"
+    },
+    "consecutiveDownWeeks": {
+        "message": "Aufeinanderfolgende Abwärtswochen:",
+        "description": "Label for consecutive down weeks"
+    },
+    "consecutiveDownMonths": {
+        "message": "Aufeinanderfolgende Abwärtsmonate:",
+        "description": "Label for consecutive down months"
+    },
+    "executeInvestment": {
+        "message": "Klicken Sie, wenn die Investition abgeschlossen ist",
+        "description": "Button to execute investment"
+    },
+    "weeklyTrends": {
+        "message": "Wöchentliche Markttrends",
+        "description": "Title for weekly market trends"
+    },
+    "monthlyTrends": {
+        "message": "Monatliche Markttrends",
+        "description": "Title for monthly market trends"
+    },
+    "nasdaqTrendsLabel": {
+        "message": "Nasdaq 100 ETF (QQQ) Trends:",
+        "description": "Label for Nasdaq 100 ETF trends"
+    },
+    "sp500TrendsLabel": {
+        "message": "S&P 500 ETF (SPY) Trends:",
+        "description": "Label for S&P 500 ETF trends"
+    },
+    "increaseRateLabel": {
+        "message": "Wöchentliche Steigerungsrate (%):",
+        "description": "Label for weekly increase rate"
+    },
+    "monthlyIncreaseRateLabel": {
+        "message": "Monatliche Steigerungsrate (%):",
+        "description": "Label for monthly increase rate"
+    },
+    "investmentDayLabel": {
+        "message": "Wöchentlicher Investitionstag:",
+        "description": "Label for weekly investment day"
+    },
+    "monday": {
+        "message": "Montag",
+        "description": "Option for Monday"
+    },
+    "tuesday": {
+        "message": "Dienstag",
+        "description": "Option for Tuesday"
+    },
+    "wednesday": {
+        "message": "Mittwoch",
+        "description": "Option for Wednesday"
+    },
+    "thursday": {
+        "message": "Donnerstag",
+        "description": "Option for Thursday"
+    },
+    "friday": {
+        "message": "Freitag",
+        "description": "Option for Friday"
+    },
+    "saveSettings": {
+        "message": "Einstellungen Speichern",
+        "description": "Button to save settings"
+    },
+    "settingsStatus": {
+        "message": "Einstellungen Gespeichert.",
+        "description": "Status message for settings"
+    },
+    "loadingData": {
+        "message": "Daten werden geladen...",
+        "description": "Status message when data is loading"
+    },
+    "errorLabel": {
+        "message": "Fehler",
+        "description": "Error label for status"
+    },
+    "warningLabel": {
+        "message": "Warnung",
+        "description": "Warning label for status"
+    },
+    "successLabel": {
+        "message": "Erfolg",
+        "description": "Success label for status"
+    },
+    "closeAbout": {
+        "message": "Schließen",
+        "description": "button to close about dialog"
+    },
+    "thisWeek": {
+        "message": "Diese Woche",
+        "description": "label for current week"
+    },
+    "lastWeek": {
+        "message": "Letzte Woche",
+        "description": "label for last week"
+    },
+    "lastLastWeek": {
+        "message": "Vorletzte Woche",
+        "description": "label for last last week"
+    },
+    "thisMonth": {
+        "message": "Diesen Monat",
+        "description": "label for current month"
+    },
+    "lastMonth": {
+        "message": "Letzten Monat",
+        "description": "label for last month"
+    },
+    "lastLastMonth": {
+        "message": "Vorletzten Monat",
+        "description": "label for last last month"
+    },
+    "notEnoughData": {
+        "message": "Nicht genügend Daten",
+        "description": "label when data is not enough"
+    },
+    "moreEarly": {
+        "message": "Früher",
+        "description": "label when data is more early"
+    }
+}

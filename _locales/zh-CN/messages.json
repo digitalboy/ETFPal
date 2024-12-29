@@ -1,0 +1,154 @@
+{
+    "extName": {
+        "message": "ETF 定投助手",
+        "description": "The name of the extension"
+    },
+    "toggleAbout": {
+        "message": "关于",
+        "description": "Button to toggle about section"
+    },
+    "toggleSettings": {
+        "message": "设置",
+        "description": "Button to toggle settings section"
+    },
+    "nextInvestmentDate": {
+        "message": "下个定投日：",
+        "description": "Label for the next investment date"
+    },
+    "currentWeeklyIncreaseRate": {
+        "message": "当前周增幅：",
+        "description": "Label for current weekly increase rate"
+    },
+    "currentMonthlyIncreaseRate": {
+        "message": "当前月增幅：",
+        "description": "Label for current monthly increase rate"
+    },
+    "currentInvestmentPercentageQQQ": {
+        "message": "当前定投比例：",
+        "description": "Label for the current investment ratio for QQQ"
+    },
+    "currentInvestmentPercentageSPY": {
+        "message": "当前定投比例：",
+        "description": "Label for the current investment ratio for SPY"
+    },
+    "consecutiveDownWeeks": {
+        "message": "连续下跌周数：",
+        "description": "Label for consecutive down weeks"
+    },
+    "consecutiveDownMonths": {
+        "message": "连续下跌月数：",
+        "description": "Label for consecutive down months"
+    },
+    "executeInvestment": {
+        "message": "如果定投完成请点击",
+        "description": "Button to execute investment"
+    },
+    "weeklyTrends": {
+        "message": "周行情趋势",
+        "description": "Title for weekly market trends"
+    },
+    "monthlyTrends": {
+        "message": "月行情趋势",
+        "description": "Title for monthly market trends"
+    },
+    "nasdaqTrendsLabel": {
+        "message": "纳斯达克100ETF(QQQ)趋势：",
+        "description": "Label for Nasdaq 100 ETF trends"
+    },
+    "sp500TrendsLabel": {
+        "message": "标普500ETF(SPY)趋势：",
+        "description": "Label for S&P 500 ETF trends"
+    },
+    "increaseRateLabel": {
+        "message": "周增幅比例 (%):",
+        "description": "Label for weekly increase rate"
+    },
+    "monthlyIncreaseRateLabel": {
+        "message": "月增幅比例 (%):",
+        "description": "Label for monthly increase rate"
+    },
+    "investmentDayLabel": {
+        "message": "每周定投日:",
+        "description": "Label for weekly investment day"
+    },
+    "monday": {
+        "message": "周一",
+        "description": "Option for Monday"
+    },
+    "tuesday": {
+        "message": "周二",
+        "description": "Option for Tuesday"
+    },
+    "wednesday": {
+        "message": "周三",
+        "description": "Option for Wednesday"
+    },
+    "thursday": {
+        "message": "周四",
+        "description": "Option for Thursday"
+    },
+    "friday": {
+        "message": "周五",
+        "description": "Option for Friday"
+    },
+    "saveSettings": {
+        "message": "保存设置",
+        "description": "Button to save settings"
+    },
+    "settingsStatus": {
+        "message": "设置已保存。",
+        "description": "Status message for settings"
+    },
+    "loadingData": {
+        "message": "正在加载数据...",
+        "description": "Status message when data is loading"
+    },
+    "errorLabel": {
+        "message": "错误",
+        "description": "Error label for status"
+    },
+    "warningLabel": {
+        "message": "警告",
+        "description": "Warning label for status"
+    },
+    "successLabel": {
+        "message": "成功",
+        "description": "Success label for status"
+    },
+    "closeAbout": {
+        "message": "关闭",
+        "description": "button to close about dialog"
+    },
+    "thisWeek": {
+        "message": "本周",
+        "description": "label for current week"
+    },
+    "lastWeek": {
+        "message": "上周",
+        "description": "label for last week"
+    },
+    "lastLastWeek": {
+        "message": "上上周",
+        "description": "label for last last week"
+    },
+    "thisMonth": {
+        "message": "本月",
+        "description": "label for current month"
+    },
+    "lastMonth": {
+        "message": "上月",
+        "description": "label for last month"
+    },
+    "lastLastMonth": {
+        "message": "上上月",
+        "description": "label for last last month"
+    },
+    "notEnoughData": {
+        "message": "数据不足",
+        "description": "label when data is not enough"
+    },
+    "moreEarly": {
+        "message": "更早",
+        "description": "label when data is more early"
+    }
+}
