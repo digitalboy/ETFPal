@@ -1,0 +1,61 @@
+<div class="about-container">
+  <h2>关于 ETF 定投助手</h2>
+  <p>
+    本工具旨在帮助用户进行 ETF 定投决策，目前支持纳斯达克 100 (QQQ) 和标普 500
+    (SPY) ETF。
+  </p>
+  <h3>策略</h3>
+  <ul>
+    <li>每周定投，基数为 100%。</li>
+    <li>根据连续下跌周数和月数，增加定投比例。</li>
+    <li>连续下跌周数增幅: 每周下跌，增加设定的周增幅比例。</li>
+    <li>连续下跌月数增幅: 每月下跌，增加设定的月增幅比例。</li>
+    <li>不含本周/本月。</li>
+  </ul>
+  <h3>功能</h3>
+  <ul>
+    <li>显示下个定投日</li>
+    <li>显示当前定投比例（考虑连续下跌周数和月数）</li>
+    <li>显示连续下跌周数和月数</li>
+    <li>显示纳斯达克和标普500的趋势数据（周和月）</li>
+    <li>记录和显示状态消息</li>
+  </ul>
+  <h3>数据来源</h3>
+  <p>
+    本工具使用以下 API 获取 ETF 数据：
+    <ul>
+      <li>
+        <a
+          href="https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_weekly"
+          target="_blank"
+          >纳斯达克周数据</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=SPY_weekly"
+          target="_blank"
+          >标普500周数据</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly"
+          target="_blank"
+          >纳斯达克月数据</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=SPY_monthly"
+          target="_blank"
+          >标普500月数据</a
+        >
+      </li>
+    </ul>
+  </p>
+  <p>
+    <strong>免责声明：</strong> 本工具提供的所有信息仅供参考，不构成任何投资建议。投资有风险，请谨慎决策。
+  </p>
+  <button id="closeAbout" class="close-button">关闭</button>
+</div>

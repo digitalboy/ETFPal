@@ -38,7 +38,10 @@ async function initialize() {
     document
       .getElementById("saveSettings")
       .addEventListener("click", saveSettingsHandler);
-    // 监听来自 settings.js 的消息
+    document
+      .getElementById("toggleAbout")
+      .addEventListener("click", toggleAbout);
+        // 监听来自 settings.js 的消息
     chrome.runtime.onMessage.addListener(function (
       request,
       sender,
@@ -171,7 +174,7 @@ async function executeInvestmentHandler() {
     consecutiveDownDays,
     investmentFrequency,
     increaseRate,
-    monthlyIncreaseRate
+     monthlyIncreaseRate
   );
   try {
     await executeInvestment(
@@ -195,4 +198,30 @@ async function saveSettingsHandler() {
   } catch (error) {
     logStatus(`保存设置失败: ${error.message}`, "error");
   }
+}
+
+function toggleAbout() {
+  const aboutContainer = document.getElementById("aboutContainer");
+  if (aboutContainer.classList.contains("hidden")) {
+    fetch("about.html")
+      .then((response) => response.text())
+      .then((html) => {
+        aboutContainer.innerHTML = html;
+        aboutContainer.classList.remove("hidden");
+         // 添加关闭按钮的事件监听
+        document.getElementById("closeAbout").addEventListener("click", closeAbout);
+      })
+       .catch((error) => {
+        console.error("Failed to load about.html:", error);
+        logStatus("加载关于页面失败", "error");
+      });
+  }else{
+      aboutContainer.classList.add("hidden");
+       aboutContainer.innerHTML = "";
+  }
+}
+function closeAbout() {
+  const aboutContainer = document.getElementById("aboutContainer");
+  aboutContainer.classList.add("hidden");
+    aboutContainer.innerHTML = "";
 }

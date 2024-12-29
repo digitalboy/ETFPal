@@ -16,10 +16,16 @@
     <div class="container">
       <header class="header">
         <h1>ETF 定投助手</h1>
-        <button id="toggleSettings" class="settings-button">
-          <i class="fas fa-cog"></i>
-        </button>
+        <div class="header-buttons">
+          <button id="toggleAbout" class="about-button">
+            <i class="fas fa-info-circle"></i>
+          </button>
+          <button id="toggleSettings" class="settings-button">
+            <i class="fas fa-cog"></i>
+          </button>
+        </div>
       </header>
+      <div id="aboutContainer" class="hidden"></div>
       <div id="settingsContainer" class="settings-container hidden">
         <div class="setting-item">
           <label for="increaseRate">周增幅比例 (%):</label>
@@ -49,11 +55,11 @@
             <label>下个定投日：</label>
             <span id="nextInvestmentDate">加载中...</span>
           </div>
-          <div class="info-row">
+           <div class="info-row">
             <label>当前周增幅：</label>
             <span id="currentWeeklyIncreaseRate">--</span>
           </div>
-          <div class="info-row">
+           <div class="info-row">
             <label>当前月增幅：</label>
             <span id="currentMonthlyIncreaseRate">--</span>
           </div>
@@ -62,29 +68,29 @@
           <div class="etf-info-column qqq-card">
             <div class="etf-card-title">纳斯达克100(QQQ)</div>
             <div class="info-row">
-              <label>定投比例：</label>
+              <label>当前定投比例：</label>
               <span id="currentInvestmentPercentageQQQ">--</span>
             </div>
             <div class="info-row">
               <label>连续下跌周数：</label>
               <span id="consecutiveDownDaysQQQ">0</span>
             </div>
-            <div class="info-row">
+             <div class="info-row">
               <label>连续下跌月数：</label>
               <span id="consecutiveDownMonthsQQQ">0</span>
             </div>
           </div>
           <div class="etf-info-column spy-card">
-             <div class="etf-card-title">标普500(SPY)</div>
+            <div class="etf-card-title">标普500(SPY)</div>
             <div class="info-row">
-              <label>定投比例：</label>
+              <label>当前定投比例：</label>
               <span id="currentInvestmentPercentageSPY">--</span>
             </div>
             <div class="info-row">
               <label>连续下跌周数：</label>
               <span id="consecutiveDownDaysSPY">0</span>
             </div>
-            <div class="info-row">
+             <div class="info-row">
               <label>连续下跌月数：</label>
               <span id="consecutiveDownMonthsSPY">0</span>
             </div>
@@ -119,23 +125,23 @@
             </div>
           </div>
         </div>
-        <div class="trends-card">
+         <div class="trends-card">
           <h3>月行情趋势</h3>
           <div class="trend-container">
             <div class="trend-item">
               <label>纳斯达克100ETF(QQQ)趋势：</label>
-              <div class="trend-cards" id="nasdaqMonthlyTrends">
-                <div class="trend-card">上上月 (加载中...)</div>
-                <div class="trend-card">上月 (加载中...)</div>
-                <div class="trend-card">本月 (加载中...)</div>
+               <div class="trend-cards" id="nasdaqMonthlyTrends">
+                  <div class="trend-card">上上月 (加载中...)</div>
+                  <div class="trend-card">上月 (加载中...)</div>
+                  <div class="trend-card">本月 (加载中...)</div>
               </div>
             </div>
-            <div class="trend-item">
+             <div class="trend-item">
               <label>标普500ETF(SPY)趋势：</label>
               <div class="trend-cards" id="sp500MonthlyTrends">
-                <div class="trend-card">上上月 (加载中...)</div>
-                <div class="trend-card">上月 (加载中...)</div>
-                <div class="trend-card">本月 (加载中...)</div>
+                   <div class="trend-card">上上月 (加载中...)</div>
+                  <div class="trend-card">上月 (加载中...)</div>
+                   <div class="trend-card">本月 (加载中...)</div>
               </div>
             </div>
           </div>

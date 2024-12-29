@@ -29,8 +29,13 @@ body {
   font-size: 1.5em;
   margin: 0;
 }
+.header-buttons {
+    display: flex;
+    gap: 5px;
+  }
 
-.settings-button {
+.settings-button,
+.about-button {
   background: none;
   border: none;
   font-size: 1.2em;
@@ -39,10 +44,67 @@ body {
   transition: color 0.3s;
 }
 
-.settings-button:hover {
+.settings-button:hover,
+.about-button:hover {
   color: #333;
 }
+.about-container {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    z-index: 1000;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.about-container.hidden {
+  display: none;
+}
+.about-container h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+.about-container h3 {
+    font-size: 1.2em;
+     margin-bottom: 5px;
+    padding-bottom: 0px;
+}
 
+.about-container p {
+  line-height: 1.6;
+    margin-bottom: 10px;
+}
+.about-container ul {
+    margin-bottom: 10px;
+    padding-left: 20px;
+
+}
+.about-container ul li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+
+}
+.close-button {
+    background-color: #428bca;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+.close-button:hover {
+    background-color: #3071a9;
+}
 .settings-container {
   padding: 15px;
   background-color: #f9f9f9;
@@ -267,7 +329,12 @@ h3 {
 .etf-info-column {
     width: 48%;
     box-sizing: border-box;
-    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center; 
+    /* padding: 10px; */
 }
 .etf-card-title {
   font-weight: bold;
