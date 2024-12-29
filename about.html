@@ -1,15 +1,32 @@
 <div class="about-container">
   <h2>关于 ETF 定投助手</h2>
   <p>
-    本工具旨在帮助用户进行 ETF 定投决策，目前支持纳斯达克 100 (QQQ) 和标普 500
-    (SPY) ETF。
+    本工具旨在帮助用户进行 ETF 定投决策，目前支持纳斯达克 100 (QQQ) 和标普 500 (SPY) ETF。
   </p>
+  <h3>基本共识</h3>
+    <p>
+        ETF 定投是一种长期投资策略，通过定期投资一定金额的资金购买 ETF，以分散风险和长期持有为目的。
+    </p>
+    <p>
+        以下是一些基本的共识：
+    </p>
+    <ul>
+        <li>ETF 投资者，承认自己是普通人，没有非常专业的投资认知，也没有足够的时间和精力。</li>
+        <li>ETF 是一种投资工具，投资者应根据自身风险承受能力和投资目标来选择合适的 ETF。</li>
+        <li>ETF 是一种分散投资工具，投资者应分散投资以降低风险。</li>
+        <li>ETF 是一种长期投资工具，投资者应长期持有 ETF 以获得长期收益。</li>  
+    </ul>
   <h3>策略</h3>
   <ul>
+    <li>定投基金：QQQ 和 SPY。</li>
+    <li>越跌越买</li>
     <li>每周定投，基数为 100%。</li>
     <li>根据连续下跌周数和月数，增加定投比例。</li>
     <li>连续下跌周数增幅: 每周下跌，增加设定的周增幅比例。</li>
     <li>连续下跌月数增幅: 每月下跌，增加设定的月增幅比例。</li>
+    <li>周增幅和月增幅比例可在设置中调整。</li>
+    <li>周增幅和月增幅比例默认为 10%。</li>
+    <li>定投比例 = 100% + (周连续下跌周期数 * 周增幅比例) + (月连续下跌周期数 * 月增幅比例)</li>
     <li>不含本周/本月。</li>
   </ul>
   <h3>功能</h3>
@@ -22,38 +39,11 @@
   </ul>
   <h3>数据来源</h3>
   <p>
-    本工具使用以下 API 获取 ETF 数据：
-    <ul>
-      <li>
-        <a
-          href="https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_weekly"
-          target="_blank"
-          >纳斯达克周数据</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=SPY_weekly"
-          target="_blank"
-          >标普500周数据</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly"
-          target="_blank"
-          >纳斯达克月数据</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=SPY_monthly"
-          target="_blank"
-          >标普500月数据</a
-        >
-      </li>
-    </ul>
+    本工具使用市场公开资料获取 ETF 资料，数据并非实时，约有 2~3 分钟延迟。    
   </p>
+  <h3>联系方式</h3>
+  <p>
+    如果您对本工具有任何疑问或建议：digitalboyzone@gmail.com
   <p>
     <strong>免责声明：</strong> 本工具提供的所有信息仅供参考，不构成任何投资建议。投资有风险，请谨慎决策。
   </p>
