@@ -32,10 +32,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function initialize() {
   try {
-    // 先加载语言设置
-    console.log("currentLang in initialize: ", currentLang);
-    //    const currentLang = await loadLanguage();  //remove this line
+    //    const currentLang = await loadLanguage(); //remove this line
     // 初始化其他功能
+    console.log("currentLang in initialize: ", currentLang);
     await loadIncreaseRate(increaseRateElementId, monthlyIncreaseRateElementId);
     await loadInvestmentDay(investmentDayElementId);
     await displayAllInfo();
@@ -227,7 +226,7 @@ function toggleAbout() {
     fetch("about.html")
       .then((response) => response.text())
       .then((html) => {
-        aboutContainer.innerHTML = html;
+        aboutContainer.innerHTML = html;        
         aboutContainer.classList.remove("hidden");
         // 添加关闭按钮的事件监听
         document
