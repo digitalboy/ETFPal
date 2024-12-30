@@ -329,8 +329,8 @@ h3 {
 .etf-info-column {
     width: 48%;
     box-sizing: border-box;
-    padding-left: 40px;
-    padding-right: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center; 

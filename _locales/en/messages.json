@@ -55,6 +55,14 @@
         "message": "Nasdaq 100 ETF (QQQ) Trends:",
         "description": "Label for Nasdaq 100 ETF trends"
     },
+    "nasdaqETFTitle": {
+        "message": "Nasdaq 100 ETF (QQQ)",
+        "description": "Title for Nasdaq 100 ETF"
+    },
+    "sp500ETFTitle": {
+        "message": "S&P 500 ETF (SPY)",
+        "description": "Title for S&P 500 ETF"
+    },
     "sp500TrendsLabel": {
         "message": "S&P 500 ETF (SPY) Trends:",
         "description": "Label for S&P 500 ETF trends"

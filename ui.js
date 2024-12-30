@@ -1,18 +1,19 @@
 // ui.js
+import { getMessage } from "./language.js";
 function logStatus(message, type = "info") {
   const statusBox = document.getElementById("statusBox");
   const logMessage = document.createElement("li");
   switch (type) {
     case "error":
-      logMessage.textContent = `[错误]: ${message}`;
+      logMessage.textContent = `[${getMessage("errorLabel")}]: ${message}`;
       logMessage.classList.add("error-message");
       break;
     case "warning":
-      logMessage.textContent = `[警告]: ${message}`;
+      logMessage.textContent = `[${getMessage("warningLabel")}]: ${message}`;
       logMessage.classList.add("warning-message");
       break;
     case "success":
-      logMessage.textContent = `[成功]: ${message}`;
+      logMessage.textContent = `[${getMessage("successLabel")}]: ${message}`;
       logMessage.classList.add("success-message");
       break;
     default:
@@ -43,7 +44,7 @@ function updateETFTrendsUI(weeklyData, monthlyData) {
   ) => {
     const cards = document.querySelectorAll(`#${containerId} .trend-card`);
     if (entries.length < 3) {
-      cards.forEach((card) => (card.textContent = "数据不足"));
+      cards.forEach((card) => (card.textContent = getMessage("notEnoughData")));
       return;
     }
 
@@ -59,31 +60,31 @@ function updateETFTrendsUI(weeklyData, monthlyData) {
           (lastRefreshedDate.getMonth() - entryDate.getMonth());
 
         if (index === 0) {
-          return "本月";
+          return getMessage("thisMonth");
         } else if (diffInMonths === 1 && index === 1) {
-          return "上月";
+          return getMessage("lastMonth");
         } else if (diffInMonths === 2 && index === 2) {
-          return "上上月";
+          return getMessage("lastLastMonth");
         } else if (diffInMonths < 2 && index === 1) {
-          return "上月";
+          return getMessage("lastMonth");
         } else if (diffInMonths < 3 && index === 2) {
-          return "上上月";
+          return getMessage("lastLastMonth");
         } else {
-          return "更早";
+          return getMessage("moreEarly");
         }
       } else {
         if (index === 0) {
-          return "本周";
+          return getMessage("thisWeek");
         } else if (diffInDays < 7 && index === 1) {
-          return "上周";
+          return getMessage("lastWeek");
         } else if (diffInDays < 14 && index === 2) {
-          return "上上周";
+          return getMessage("lastLastWeek");
         } else if (diffInDays < 14 && index === 1) {
-          return "上周";
+          return getMessage("lastWeek");
         } else if (diffInDays < 21 && index === 2) {
-          return "上上周";
+          return getMessage("lastLastWeek");
         } else {
-          return "更早";
+          return getMessage("moreEarly");
         }
       }
     };
@@ -119,7 +120,7 @@ function updateETFTrendsUI(weeklyData, monthlyData) {
           card.classList.add("negative");
         }
       } else {
-        card.textContent = "数据不足";
+        card.textContent = getMessage("notEnoughData");
         card.classList.remove("positive", "negative");
       }
     });
@@ -142,16 +143,22 @@ function updateETFTrendsUI(weeklyData, monthlyData) {
   );
 }
 function displayETFTrends(weeklyData, monthlyData) {
-  logStatus("正在加载ETF趋势数据...", "info");
+  logStatus(getMessage("loadingData"), "info");
   if (weeklyData && monthlyData) {
     updateETFTrendsUI(weeklyData, monthlyData);
-    logStatus("成功加载ETF趋势数据。", "success");
+    logStatus(
+      getMessage("successLabel") + " " + getMessage("loadETFTrendsSuccess"),
+      "success"
+    );
   } else {
-    document.getElementById("nasdaqTrends").innerText = "加载失败";
-    document.getElementById("sp500Trends").innerText = "加载失败";
-    document.getElementById("nasdaqMonthlyTrends").innerText = "加载失败";
-    document.getElementById("sp500MonthlyTrends").innerText = "加载失败";
-    logStatus("加载ETF趋势数据失败", "error");
+    document.getElementById("nasdaqTrends").innerText =
+      getMessage("errorLabel");
+    document.getElementById("sp500Trends").innerText = getMessage("errorLabel");
+    document.getElementById("nasdaqMonthlyTrends").innerText =
+      getMessage("errorLabel");
+    document.getElementById("sp500MonthlyTrends").innerText =
+      getMessage("errorLabel");
+    logStatus(getMessage("loadETFTrendsFailed"), "error");
   }
 }
 function formatPrice(price) {
