@@ -1,6 +1,10 @@
 // popup.js
 import { fetchETFData } from "./api.js";
-import { detectAndSetLanguage, getMessage } from "./language.js";
+import {
+  detectAndSetLanguage,
+  getMessage,
+  updatePageContent,
+} from "./language.js";
 import {} from "./data.js";
 import {
   calculateInvestmentPercentage,
@@ -24,7 +28,7 @@ const investmentDayElementId = "investmentDay";
 let currentLang;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 检测并设置语言
+  // 检测并设置语言并等待完成
   currentLang = detectAndSetLanguage();
   // 初始化其他功能
   await initialize();
@@ -32,8 +36,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function initialize() {
   try {
-    //    const currentLang = await loadLanguage(); //remove this line
-    // 初始化其他功能
     console.log("currentLang in initialize: ", currentLang);
     await loadIncreaseRate(increaseRateElementId, monthlyIncreaseRateElementId);
     await loadInvestmentDay(investmentDayElementId);
@@ -65,15 +67,6 @@ async function initialize() {
   } catch (error) {
     logStatus(`初始化失败: ${error.message}`, "error");
   }
-}
-
-async function loadLanguage() {
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get(["language"], function (result) {
-      const language = result.language || detectAndSetLanguage();
-      resolve(language);
-    });
-  });
 }
 
 async function displayAllInfo() {
@@ -226,7 +219,7 @@ function toggleAbout() {
     fetch("about.html")
       .then((response) => response.text())
       .then((html) => {
-        aboutContainer.innerHTML = html;        
+        aboutContainer.innerHTML = html;
         aboutContainer.classList.remove("hidden");
         // 添加关闭按钮的事件监听
         document

@@ -8,47 +8,47 @@
         "description": "Button to toggle about section"
     },
     "toggleSettings": {
-        "message": "Einstellungen",
+        "message": "Einstell.",
         "description": "Button to toggle settings section"
     },
     "nextInvestmentDate": {
-        "message": "Nächster Investitionstag:",
+        "message": "Nächst. Investitionstag:",
         "description": "Label for the next investment date"
     },
     "currentWeeklyIncreaseRate": {
-        "message": "Aktuelle wöchentliche Steigerung:",
+        "message": "Akt. wöchentl. Steigerung:",
         "description": "Label for current weekly increase rate"
     },
     "currentMonthlyIncreaseRate": {
-        "message": "Aktuelle monatliche Steigerung:",
+        "message": "Akt. monatl. Steigerung:",
         "description": "Label for current monthly increase rate"
     },
     "currentInvestmentPercentageQQQ": {
-        "message": "Aktuelles Investitionsverhältnis:",
+        "message": "Akt. Investitionsverhält.:",
         "description": "Label for the current investment ratio for QQQ"
     },
     "currentInvestmentPercentageSPY": {
-        "message": "Aktuelles Investitionsverhältnis:",
+        "message": "Akt. Investitionsverhält.:",
         "description": "Label for the current investment ratio for SPY"
     },
     "consecutiveDownWeeks": {
-        "message": "Aufeinanderfolgende Abwärtswochen:",
+        "message": "Aufeinanderfolg. Abwärtswochen:",
         "description": "Label for consecutive down weeks"
     },
     "consecutiveDownMonths": {
-        "message": "Aufeinanderfolgende Abwärtsmonate:",
+        "message": "Aufeinanderfolg. Abwärtsmonate:",
         "description": "Label for consecutive down months"
     },
     "executeInvestment": {
-        "message": "Klicken Sie, wenn die Investition abgeschlossen ist",
+        "message": "Klick wenn Invest. abgeschl.",
         "description": "Button to execute investment"
     },
     "weeklyTrends": {
-        "message": "Wöchentliche Markttrends",
+        "message": "Wöchentl. Markttrends",
         "description": "Title for weekly market trends"
     },
     "monthlyTrends": {
-        "message": "Monatliche Markttrends",
+        "message": "Monatl. Markttrends",
         "description": "Title for monthly market trends"
     },
     "nasdaqTrendsLabel": {
@@ -60,15 +60,15 @@
         "description": "Label for S&P 500 ETF trends"
     },
     "increaseRateLabel": {
-        "message": "Wöchentliche Steigerungsrate (%):",
+        "message": "Wöchentl. Steigerungsrate (%):",
         "description": "Label for weekly increase rate"
     },
     "monthlyIncreaseRateLabel": {
-        "message": "Monatliche Steigerungsrate (%):",
+        "message": "Monatl. Steigerungsrate (%):",
         "description": "Label for monthly increase rate"
     },
     "investmentDayLabel": {
-        "message": "Wöchentlicher Investitionstag:",
+        "message": "Wöchentl. Investitionstag:",
         "description": "Label for weekly investment day"
     },
     "monday": {
@@ -92,11 +92,11 @@
         "description": "Option for Friday"
     },
     "saveSettings": {
-        "message": "Einstellungen Speichern",
+        "message": "Einstell. Speichern",
         "description": "Button to save settings"
     },
     "settingsStatus": {
-        "message": "Einstellungen Gespeichert.",
+        "message": "Einstell. Gespeichert.",
         "description": "Status message for settings"
     },
     "loadingData": {

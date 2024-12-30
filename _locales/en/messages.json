@@ -1,6 +1,6 @@
 {
     "extName": {
-        "message": "ETF Investment Assistant",
+        "message": "ETF Invest Asst",
         "description": "The name of the extension"
     },
     "toggleAbout": {
@@ -12,43 +12,43 @@
         "description": "Button to toggle settings section"
     },
     "nextInvestmentDate": {
-        "message": "Next Investment Date:",
+        "message": "Next Invest Date:",
         "description": "Label for the next investment date"
     },
     "currentWeeklyIncreaseRate": {
-        "message": "Current Weekly Increase:",
+        "message": "Curr Weekly Incr:",
         "description": "Label for current weekly increase rate"
     },
     "currentMonthlyIncreaseRate": {
-        "message": "Current Monthly Increase:",
+        "message": "Curr Monthly Incr:",
         "description": "Label for current monthly increase rate"
     },
     "currentInvestmentPercentageQQQ": {
-        "message": "Current Investment Ratio:",
+        "message": "Curr Invest Ratio:",
         "description": "Label for the current investment ratio for QQQ"
     },
     "currentInvestmentPercentageSPY": {
-        "message": "Current Investment Ratio:",
+        "message": "Curr Invest Ratio:",
         "description": "Label for the current investment ratio for SPY"
     },
     "consecutiveDownWeeks": {
-        "message": "Consecutive Down Weeks:",
+        "message": "Consec Down Weeks:",
         "description": "Label for consecutive down weeks"
     },
     "consecutiveDownMonths": {
-        "message": "Consecutive Down Months:",
+        "message": "Consec Down Months:",
         "description": "Label for consecutive down months"
     },
     "executeInvestment": {
-        "message": "Click if the investment is complete",
+        "message": "Click if invest is done",
         "description": "Button to execute investment"
     },
     "weeklyTrends": {
-        "message": "Weekly Market Trends",
+        "message": "Weekly Mkt Trends",
         "description": "Title for weekly market trends"
     },
     "monthlyTrends": {
-        "message": "Monthly Market Trends",
+        "message": "Monthly Mkt Trends",
         "description": "Title for monthly market trends"
     },
     "nasdaqTrendsLabel": {
@@ -60,15 +60,15 @@
         "description": "Label for S&P 500 ETF trends"
     },
     "increaseRateLabel": {
-        "message": "Weekly Increase Rate (%):",
+        "message": "Weekly Incr Rate (%):",
         "description": "Label for weekly increase rate"
     },
     "monthlyIncreaseRateLabel": {
-        "message": "Monthly Increase Rate (%):",
+        "message": "Monthly Incr Rate (%):",
         "description": "Label for monthly increase rate"
     },
     "investmentDayLabel": {
-        "message": "Weekly Investment Day:",
+        "message": "Weekly Invest Day:",
         "description": "Label for weekly investment day"
     },
     "monday": {

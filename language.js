@@ -14,7 +14,7 @@ export function detectAndSetLanguage() {
   // 保存语言设置
   chrome.storage.local.set({ language: targetLang }, () => {
     console.log("Language set to:", targetLang); // add log
-    updatePageContent(targetLang);
+    updatePageContent(targetLang); // 确保在这里调用
   });
 
   return targetLang;

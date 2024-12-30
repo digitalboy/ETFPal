@@ -1,6 +1,6 @@
 {
     "extName": {
-        "message": "Asistente de Inversión en ETF",
+        "message": "Asistente Inv. ETF",
         "description": "The name of the extension"
     },
     "toggleAbout": {
@@ -8,67 +8,67 @@
         "description": "Button to toggle about section"
     },
     "toggleSettings": {
-        "message": "Configuración",
+        "message": "Config.",
         "description": "Button to toggle settings section"
     },
     "nextInvestmentDate": {
-        "message": "Próxima Fecha de Inversión:",
+        "message": "Próx. Fecha Inv.:",
         "description": "Label for the next investment date"
     },
     "currentWeeklyIncreaseRate": {
-        "message": "Aumento Semanal Actual:",
+        "message": "Aum. Sem. Actual:",
         "description": "Label for current weekly increase rate"
     },
     "currentMonthlyIncreaseRate": {
-        "message": "Aumento Mensual Actual:",
+        "message": "Aum. Mens. Actual:",
         "description": "Label for current monthly increase rate"
     },
     "currentInvestmentPercentageQQQ": {
-        "message": "Porcentaje de Inversión Actual:",
+        "message": "Porc. Inv. Actual:",
         "description": "Label for the current investment ratio for QQQ"
     },
     "currentInvestmentPercentageSPY": {
-        "message": "Porcentaje de Inversión Actual:",
+        "message": "Porc. Inv. Actual:",
         "description": "Label for the current investment ratio for SPY"
     },
     "consecutiveDownWeeks": {
-        "message": "Semanas Consecutivas de Bajada:",
+        "message": "Semanas Consec. Baja:",
         "description": "Label for consecutive down weeks"
     },
     "consecutiveDownMonths": {
-        "message": "Meses Consecutivos de Bajada:",
+        "message": "Meses Consec. Baja:",
         "description": "Label for consecutive down months"
     },
     "executeInvestment": {
-        "message": "Haga clic si la inversión está completa",
+        "message": "Clic si inv. completa",
         "description": "Button to execute investment"
     },
     "weeklyTrends": {
-        "message": "Tendencias Semanales del Mercado",
+        "message": "Tend. Sem. Mercado",
         "description": "Title for weekly market trends"
     },
     "monthlyTrends": {
-        "message": "Tendencias Mensuales del Mercado",
+        "message": "Tend. Mens. Mercado",
         "description": "Title for monthly market trends"
     },
     "nasdaqTrendsLabel": {
-        "message": "Tendencias del ETF Nasdaq 100 (QQQ):",
+        "message": "Tend. ETF Nasdaq 100 (QQQ):",
         "description": "Label for Nasdaq 100 ETF trends"
     },
     "sp500TrendsLabel": {
-        "message": "Tendencias del ETF S&P 500 (SPY):",
+        "message": "Tend. ETF S&P 500 (SPY):",
         "description": "Label for S&P 500 ETF trends"
     },
     "increaseRateLabel": {
-        "message": "Tasa de Aumento Semanal (%):",
+        "message": "Tasa Aum. Sem. (%):",
         "description": "Label for weekly increase rate"
     },
     "monthlyIncreaseRateLabel": {
-        "message": "Tasa de Aumento Mensual (%):",
+        "message": "Tasa Aum. Mens. (%):",
         "description": "Label for monthly increase rate"
     },
     "investmentDayLabel": {
-        "message": "Día de Inversión Semanal:",
+        "message": "Día Inv. Sem.:",
         "description": "Label for weekly investment day"
     },
     "monday": {
@@ -92,11 +92,11 @@
         "description": "Option for Friday"
     },
     "saveSettings": {
-        "message": "Guardar Configuración",
+        "message": "Guardar Config.",
         "description": "Button to save settings"
     },
     "settingsStatus": {
-        "message": "Configuración Guardada.",
+        "message": "Config. Guardada.",
         "description": "Status message for settings"
     },
     "loadingData": {
@@ -128,7 +128,7 @@
         "description": "label for last week"
     },
     "lastLastWeek": {
-        "message": "Antepenúltima Semana",
+        "message": "Antepenúlt. Semana",
         "description": "label for last last week"
     },
     "thisMonth": {
@@ -140,11 +140,11 @@
         "description": "label for last month"
     },
     "lastLastMonth": {
-        "message": "Antepenúltimo Mes",
+        "message": "Antepenúlt. Mes",
         "description": "label for last last month"
     },
     "notEnoughData": {
-        "message": "No hay suficientes datos",
+        "message": "No hay sufic. datos",
         "description": "label when data is not enough"
     },
     "moreEarly": {
