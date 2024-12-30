@@ -1,85 +1,102 @@
-# ETF 定投助手
+好的，这是更新后的 README.md 文件，加入了更吸引人的情绪化表达：
 
-一个简单的 ETF 定投决策工具，支持纳斯达克和标普500 ETF。
+# ETF 定投助手：让你的投资不再盲目！🚀
 
-## 策略
-- 越跌越买入
-- 定投比例 = 100% + (周连续下跌周期数 * 周增幅比例) + (月连续下跌周期数 * 月增幅比例)
-- 不含本周
+你是否也曾因为股市的波动而感到焦虑，不知道何时才是入场的最佳时机？别担心，我们为你打造了一款简单而强大的 ETF 定投决策工具，它将像一位经验丰富的舵手，引导你的投资航船稳步前行。这款工具目前支持纳斯达克 100 (QQQ) 和标普 500 (SPY) ETF，为你提供智能化的定投建议。
 
-## 功能
+## 策略：越跌越买，让微笑曲线眷顾你！📈
 
-- 显示下个定投日和上个定投日
-- 显示假如今天定投的百分比
-- 显示连续下跌天数
-- 显示纳斯达克和标普500的趋势数据
-- 记录和显示状态消息
+我们的核心策略非常简单：**越跌越买！** 当市场下跌时，正是你积累更多筹码的绝佳机会。我们的定投比例会根据市场的波动智能调整：
 
-## 文件结构
-- [background.js](background.js)：扩展的后台脚本。
-- [icons](icons)：包含扩展的图标文件。
-- [manifest.json](manifest.json)：定义了扩展的元数据和权限。
-- [popup.html](popup.html)：定义了扩展的弹出页面结构。
-- [popup.js](popup.js)：包含弹出页面的逻辑。
-- [investment.js](investment.js)：包含定投策略的逻辑。
-- [investmentStrategy.js](investmentStrategy.js)：包含定投策略的逻辑。
-- [styles.css](styles.css)：定义了弹出页面的样式。
-- [settings.js](settings.js)：包含设置页面的逻辑。
-- [ui.js](ui.js)：包含用户界面更新的逻辑。
-- [utils.js](utils.js)：包含实用工具函数。
-- [data.js](data.js)：包含数据处理逻辑。
-- [api.js](api.js)：包含与 API 交互的逻辑。
+-   定投比例 = 100% + (周连续下跌周期数 * 周增幅比例) + (月连续下跌周期数 * 月增幅比例)
+-   请注意，本周和本月的下跌都不计算在内，我们只关注过去的趋势，让你更理性地做出决策。
 
-## 数据来源
-https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_weekly
-https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=SPY_weekly
+## 功能：你的专属投资管家，一切尽在掌握！💼
 
-https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly
-https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly
+这款工具不仅仅是数据，更是你的投资伙伴，它为你提供：
 
-## 数据样式
-```
+-   **清晰的定投日历：** 准确显示下个定投日，让你不再错过任何一个投资机会。
+-   **智能的定投比例：** 根据市场下跌情况，自动计算出最佳的定投比例，让你在低谷时敢于加仓。
+-   **连续下跌天数：** 清晰展示连续下跌的周数和月数，让你对市场趋势一目了然。
+-   **全面的趋势数据：** 纳斯达克和标普500的周和月趋势数据，助你把握市场脉搏。
+-   **实时的状态消息：** 记录和显示状态消息，让你随时了解工具的运行状况。
+
+## 文件结构：清晰明了，就像你的投资策略一样！🗂️
+
+-   `background.js`：扩展的后台脚本，默默守护你的投资决策。
+-   `icons`：精心设计的图标文件，让你的投资工具更具个性。
+-   `manifest.json`：定义扩展的元数据和权限，为你提供安全保障。
+-   `popup.html`：扩展的弹出页面结构，简洁而美观。
+-   `popup.js`：弹出页面的逻辑，让操作更加流畅。
+-   `investment.js`：包含定投策略的逻辑，为你量身定制投资方案。
+-  `investmentStrategy.js`：包含定投策略的逻辑，核心算法都在这里。
+-   `styles.css`：定义弹出页面的样式，给你舒适的视觉体验。
+-   `settings.js`：包含设置页面的逻辑，让你可以自定义你的投资偏好。
+-   `ui.js`：包含用户界面更新的逻辑，为你呈现最及时的市场信息。
+-   `utils.js`：包含实用工具函数，让工具运行更高效。
+-   `data.js`：包含数据处理逻辑，让信息更精准。
+-   `api.js`：包含与 API 交互的逻辑，为你获取最新的市场数据。
+
+## 数据来源：真实可靠，让你投资更安心！🛡️
+
+我们使用以下公开 API 获取 ETF 数据，数据虽然不是实时更新，但仍然能够提供有价值的参考：
+
+-   [纳斯达克 100 ETF 周数据](https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_weekly)
+-   [标普 500 ETF 周数据](https://eft-pal-weekly-data-provider.digitalboyzone.workers.dev/?etf=SPY_weekly)
+-   [纳斯达克 100 ETF 月数据](https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly)
+-   [标普 500 ETF 月数据](https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthly)
+
+## 数据样式：一目了然，让你轻松掌握市场信息！📊
+
+以下是数据的示例格式，简单明了：
+
+### 周数据示例：
+
+```json
 {
-"Meta Data": {
-"1. Information": "Weekly Prices (open, high, low, close) and Volumes",
-"2. Symbol": "QQQ",
-"3. Last Refreshed": "2024-12-18",
-"4. Time Zone": "US/Eastern"
-},
-"Weekly Time Series": {
-"2024-12-18": {
-"1. open": "533.0800",
-"2. high": "539.1500",
-"3. low": "515.0100",
-"4. close": "516.4700",
-"5. volume": "115262088"
-},
-"2024-12-13": {
-"1. open": "525.5500",
-"2. high": "533.1661",
-"3. low": "519.1600",
-"4. close": "530.5300",
-"5. volume": "129550933"
-},
-"2024-12-06": {
-"1. open": "511.0100",
-"2. high": "526.7200",
-"3. low": "510.6200",
-"4. close": "526.4800",
-"5. volume": "111763530"
-},
-"2024-11-29": {
-"1. open": "509.9000",
-"2. high": "511.4525",
-"3. low": "501.9300",
-"4. close": "509.7400",
-"5. volume": "93223636"
-},
-
-...
+    "Meta Data": {
+        "1. Information": "Weekly Prices (open, high, low, close) and Volumes",
+        "2. Symbol": "QQQ",
+        "3. Last Refreshed": "2024-12-18",
+        "4. Time Zone": "US/Eastern"
+    },
+    "Weekly Time Series": {
+        "2024-12-18": {
+            "1. open": "533.0800",
+            "2. high": "539.1500",
+            "3. low": "515.0100",
+            "4. close": "516.4700",
+            "5. volume": "115262088"
+        },
+        "2024-12-13": {
+            "1. open": "525.5500",
+            "2. high": "533.1661",
+            "3. low": "519.1600",
+            "4. close": "530.5300",
+            "5. volume": "129550933"
+        },
+        "2024-12-06": {
+            "1. open": "511.0100",
+            "2. high": "526.7200",
+            "3. low": "510.6200",
+            "4. close": "526.4800",
+            "5. volume": "111763530"
+        },
+        "2024-11-29": {
+            "1. open": "509.9000",
+            "2. high": "511.4525",
+            "3. low": "501.9300",
+            "4. close": "509.7400",
+            "5. volume": "93223636"
+        },
+        ...
+    }
 }
 ```
-```
+
+### 月数据示例：
+
+```json
 {
     "Meta Data": {
         "1. Information": "Monthly Prices (open, high, low, close) and Volumes",
@@ -113,3 +130,5 @@ https://eft-pal-monthly-data-provider.digitalboyzone.workers.dev/?etf=QQQ_monthl
     }
 }
 ```
+
+希望这个工具能帮助你更轻松、更理性地进行 ETF 定投，实现财富的稳健增长。🎉
